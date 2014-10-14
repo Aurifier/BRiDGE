@@ -1,21 +1,73 @@
 package com.caffeinecraft.bridge;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
 
 
-public class TestActivity extends ActionBarActivity {
+public class TestActivity extends Activity implements View.OnClickListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-        Log.d("BRiDGE", "Activity created.");
+
+        Button button = (Button)findViewById(R.id.restartButton);
+        button.setOnClickListener(this);
+
+        Log.d("BRiDGE", "Activity created. (onCreate)");
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();  // Always call the superclass method first
+
+        Log.d("BRiDGE", "Activity started. (onStart)");
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+
+        Log.d("BRiDGE", "Activity resumed. (onResume)");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();  // Always call the superclass method first
+
+        Log.d("BRiDGE", "Activity paused. (onPause)");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();  // Always call the superclass
+
+        Log.d("BRiDGE", "Activity destroyed. (onDestroy)");
+        // Stop method tracing that the activity started during onCreate()
+        android.os.Debug.stopMethodTracing();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();  // Always call the superclass method first
+
+        Log.d("BRiDGE", "Activity restarted. (onRestart)");
+        // Activity being restarted from stopped state
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();  // Always call the superclass method first
+
+        Log.d("BRiDGE", "Activity stopped. (onStop)");
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -34,5 +86,11 @@ public class TestActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        Log.d("BRiDGE", "click detected");
+        this.recreate();
     }
 }
