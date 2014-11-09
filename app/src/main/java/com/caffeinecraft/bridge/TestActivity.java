@@ -101,11 +101,13 @@ public class TestActivity extends Activity implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         Log.d("BRiDGE", "click detected");
-        if(v.getId() == R.id.buttonContactList)
-        {
-            startActivity(new Intent(this, ContactsList.class));
+        switch(v.getId()) {
+            case R.id.buttonContactList:
+                startActivity(new Intent(this, ContactsList.class));
+                break;
+            case R.id.restartButton:
+                startActivity(new Intent(this, ImportContacts.class));
+                break;
         }
-        Intent intent = new Intent(this, ImportContacts.class);
-        startActivity(intent);
     }
 }
