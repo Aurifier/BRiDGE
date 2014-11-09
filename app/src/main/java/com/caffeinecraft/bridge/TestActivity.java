@@ -2,6 +2,7 @@ package com.caffeinecraft.bridge;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -97,6 +98,8 @@ public class TestActivity extends Activity implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         Log.d("BRiDGE", "click detected");
-        this.finish();
+        //this.finish();
+        Intent intent = new Intent(this, ImportContacts.class);
+        startActivity(intent);
     }
 }
