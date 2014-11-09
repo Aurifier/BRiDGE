@@ -5,4 +5,25 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <!--Button Names-->
+    <string name="conversation_list">Conversation List</string>
+    <string name="contact_list">Contact List</string>
+
+    <string name="new_message">New Message</string>
+    <string name="new_contact">New Contact</string>
+
+    <string name="import_contact">Import Contact</string>
+    <string name="edit_contact">Edit Contact</string>
+
+    <string name="import_qr_code">Import QR Code</string>
+    <string name="export_qr_code">Export QR Code</string>
+    <string name="scan_qr_code">Scan QR Code</string>
+
+    <string name="link_to_email_or_social_media">Link to Email or Social Media</string>
+    <string name="import_this">Import</string>
+    <string name="link">Link</string>
+    <string name="send">Send</string>
+    <string name="merge">Merge</string>
+
+
 </resources>

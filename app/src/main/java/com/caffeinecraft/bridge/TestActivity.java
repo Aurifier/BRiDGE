@@ -2,6 +2,7 @@ package com.caffeinecraft.bridge;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -22,6 +23,8 @@ public class TestActivity extends Activity implements View.OnClickListener{
 
         Button button = (Button)findViewById(R.id.restartButton);
         button.setOnClickListener(this);
+        Button buttonContactList = (Button)findViewById(R.id.buttonContactList);
+        buttonContactList.setOnClickListener(this);
 
         ContactsDataSource foo = new ContactsDataSource(this);
         foo.open();
@@ -75,6 +78,7 @@ public class TestActivity extends Activity implements View.OnClickListener{
         Log.d("BRiDGE", "Activity stopped. (onStop)");
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -97,6 +101,10 @@ public class TestActivity extends Activity implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         Log.d("BRiDGE", "click detected");
+        if(v.getId() == R.id.buttonContactList)
+        {
+            startActivity(new Intent(this, ContactsList.class));
+        }
         this.finish();
     }
 }
