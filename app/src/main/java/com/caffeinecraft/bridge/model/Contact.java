@@ -1,12 +1,12 @@
-package com.caffeinecraft.bridge;
+package com.caffeinecraft.bridge.model;
 
-/**
- * Created by drew on 11/7/14.
- */
+import java.util.List;
+
 public class Contact {
     private long id;
     private String firstName;
     private String lastName;
+    private List<String> emails;
 
     public long getId() {
         return id;
@@ -32,7 +32,19 @@ public class Contact {
         this.lastName = name;
     }
 
-    //TODO: Other getters and setters
+    public void addEmail(String email) {
+        emails.add(email);
+    }
 
-    //TODO: Override toString()?
+    public String[] getEmails() {
+        return (String[])emails.toArray();
+    }
+
+    @Override
+    public String toString() {
+        if(lastName != null)
+            return firstName + " " + lastName;
+
+        return firstName;
+    }
 }

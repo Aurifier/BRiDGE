@@ -1,6 +1,7 @@
 package com.caffeinecraft.bridge;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -8,6 +9,8 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+
+import com.caffeinecraft.bridge.dao.ContactsDataSource;
 
 
 public class TestActivity extends Activity implements View.OnClickListener{
@@ -19,6 +22,9 @@ public class TestActivity extends Activity implements View.OnClickListener{
 
         Button button = (Button)findViewById(R.id.restartButton);
         button.setOnClickListener(this);
+
+        ContactsDataSource foo = new ContactsDataSource(this);
+        foo.open();
 
         Log.d("BRiDGE", "Activity created. (onCreate)");
     }
