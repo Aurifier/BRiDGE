@@ -19,10 +19,8 @@
             </intent-filter>
         </activity>
         <activity
-<<<<<<< HEAD
             android:name="com.caffeinecraft.bridge.ContactsList"
             android:label="@string/app_name" >
-=======
             android:name=".ImportContacts"
             android:label="@string/title_activity_import_contacts" >
         </activity>
@@ -33,7 +31,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.caffeinecraft.bridge.ImportContacts" />
->>>>>>> origin/master
         </activity>
     </application>
 
