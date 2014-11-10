@@ -20,4 +20,50 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_contact"
+        android:id="@+id/buttonEditContact"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/new_message"
+        android:id="@+id/buttonNewMessage"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/buttonEditContact"
+        android:layout_toStartOf="@+id/buttonEditContact" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/export_qr_code"
+        android:id="@+id/buttonExportQRCode"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/buttonNewMessage"
+        android:layout_toStartOf="@+id/buttonNewMessage" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/textName"
+        android:layout_below="@+id/buttonExportQRCode"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listMeansofContact"
+        android:layout_below="@+id/textName"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/buttonConversationList" />
+
 </RelativeLayout>
