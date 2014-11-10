@@ -1,5 +1,6 @@
 package com.caffeinecraft.bridge.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Contact {
@@ -7,6 +8,10 @@ public class Contact {
     private String firstName;
     private String lastName;
     private List<String> emails;
+
+    public Contact() {
+        emails = new ArrayList<String>();
+    }
 
     public long getId() {
         return id;
