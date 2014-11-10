@@ -12,7 +12,7 @@ public class ViewContact extends Activity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.contacts_list);
+        setContentView(R.layout.activity_contact_list);
 
         Bundle bundle = getIntent().getExtras();
         String stuff = bundle.getString("row number");

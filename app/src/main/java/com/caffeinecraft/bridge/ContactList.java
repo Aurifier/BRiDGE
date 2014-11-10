@@ -1,28 +1,19 @@
 package com.caffeinecraft.bridge;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.ListView;
 import com.caffeinecraft.bridge.model.Contact;
 import java.util.ArrayList;
 import java.util.List;
-import android.widget.AdapterView.OnItemClickListener;
-import com.caffeinecraft.bridge.ViewContact;
 
 import com.caffeinecraft.bridge.dao.ContactsDataSource;
 
-public class ContactsList extends Activity implements View.OnClickListener{
+public class ContactList extends Activity implements View.OnClickListener{
 
     private ListView lv;
     List<Contact> contactlist;
@@ -31,7 +22,7 @@ public class ContactsList extends Activity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.contacts_list);
+        setContentView(R.layout.activity_contact_list);
 
         lv = (ListView) findViewById(R.id.listView);
 

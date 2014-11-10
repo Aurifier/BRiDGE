@@ -18,11 +18,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.caffeinecraft.bridge.ContactsList"
+            android:name=".ContactList"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.caffeinecraft.bridge.ViewContact"
+            android:name=".ViewContact"
             android:label="@string/app_name" >
         </activity>
         <activity

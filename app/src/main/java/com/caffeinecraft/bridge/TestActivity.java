@@ -1,13 +1,11 @@
 package com.caffeinecraft.bridge;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
@@ -101,7 +99,7 @@ public class TestActivity extends Activity implements View.OnClickListener{
         Log.d("BRiDGE", "click detected");
         switch(v.getId()) {
             case R.id.buttonContactList:
-                startActivity(new Intent(this, ContactsList.class));
+                startActivity(new Intent(this, ContactList.class));
                 break;
         }
     }
