@@ -1,10 +1,8 @@
 package com.caffeinecraft.bridge;
 
-
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Activity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -12,13 +10,12 @@ import android.widget.TextView;
 
 import com.caffeinecraft.bridge.dao.ContactsDataSource;
 import com.caffeinecraft.bridge.model.Contact;
-import com.caffeinecraft.bridge.EditContact;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ViewContact extends Activity implements View.OnClickListener{
+public class EditContact extends Activity implements View.OnClickListener{
 
     private Contact thiscontact;
 
@@ -26,7 +23,7 @@ public class ViewContact extends Activity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_contact);
+        setContentView(R.layout.activity_edit_contact);
 
         ContactsDataSource foo = new ContactsDataSource(this);
         foo.open();
@@ -42,30 +39,21 @@ public class ViewContact extends Activity implements View.OnClickListener{
             {thiscontact = allcontacts.get(i);}
         }
 
-        TextView txtName=(TextView)findViewById(R.id.textName);
-        txtName.setText(thiscontact.toString());
+        TextView editTextFirstName=(TextView)findViewById(R.id.editTextFirstName);
+        editTextFirstName.setText(thiscontact.getFirstName());
+        TextView editTextLastName=(TextView)findViewById(R.id.editTextLastName);
+        editTextLastName.setText(thiscontact.getLastName());
 
-        ListView lv = (ListView) findViewById(R.id.listView);
-        String[] emails = thiscontact.getEmails();
-        ArrayList<String> meansofcontact = new ArrayList<String>(Arrays.asList(thiscontact.getEmails()));
-        meansofcontact.add("HELLO");
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_1,
-                meansofcontact);
-        //TODO: Make this next line not cause errors
-        //lv.setAdapter(arrayAdapter);
+        //TODO: Make listView of means of contact
 
         View btnConversationList = findViewById(R.id.buttonConversationList);
         btnConversationList.setOnClickListener(this);
         View btnContactList = findViewById(R.id.buttonContactList);
         btnContactList.setOnClickListener(this);
-        View btnEditContact = findViewById(R.id.buttonEditContact);
-        btnEditContact.setOnClickListener(this);
-        View btnNewMessage = findViewById(R.id.buttonNewMessage);
-        btnNewMessage.setOnClickListener(this);
-        View btnExportQRCode = findViewById(R.id.buttonExportQRCode);
-        btnExportQRCode.setOnClickListener(this);
+        View btnMergeContact = findViewById(R.id.buttonMergeContact);
+        btnMergeContact.setOnClickListener(this);
+        View btnImportQRCode = findViewById(R.id.buttonImportQRCode);
+        btnImportQRCode.setOnClickListener(this);
     }
 
     @Override
@@ -77,19 +65,17 @@ public class ViewContact extends Activity implements View.OnClickListener{
             case R.id.buttonContactList:
                 startActivity(new Intent(this, ContactList.class));
                 break;
-            case R.id.buttonEditContact:
-                Intent intent = new Intent(getApplicationContext(), EditContact.class);
+            case R.id.buttonMergeContact:
+                Intent intent = new Intent(getApplicationContext(), MergeContact.class);
                 Bundle bundle = new Bundle();
                 bundle.putLong("contactid",thiscontact.getId());
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
-            case R.id.buttonNewMessage:
-                //startActivity(new Intent(this, NewMessage.class));
-                break;
-            case R.id.buttonExportQRCode:
-                //startActivity(new Intent(this, ExportQRCode.class));
+            case R.id.buttonImportQRCode:
+                //startActivity(new Intent(this, ImportQRCode.class));
                 break;
         }
     }
 }
+
