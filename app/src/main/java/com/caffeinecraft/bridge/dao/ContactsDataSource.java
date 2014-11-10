@@ -85,6 +85,7 @@ public class ContactsDataSource {
             emailCursor.moveToFirst();
             while(!emailCursor.isAfterLast()) {
                 contact.addEmail(emailCursor.getString(0));
+                emailCursor.moveToNext();
             }
             emailCursor.close();
             contacts.add(contact);
