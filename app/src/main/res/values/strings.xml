@@ -9,6 +9,8 @@
     <string name="phone_contacts">Phone Contacts</string>
     <string name="facebook_friends">Facebook Friends</string>
     <string name="title_activity_import_phone_contacts">Import Phone Contacts</string>
+    <string name="title_activity_contacts_list">Contacts List</string>
+    <string name="title_activity_view_contact">View Contact</string>
 
     <!--Button Names-->
     <string name="conversation_list">Conversation List</string>
