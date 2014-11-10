@@ -79,7 +79,7 @@ public class ContactsDataSource {
                     + "c." + BridgeSQLiteHelper.ContactTable.COLUMN_ID + " = "
                     + " e." + BridgeSQLiteHelper.ContactEmailTable.COLUMN_CONTACT
                 + " WHERE "
-                    + "c." + BridgeSQLiteHelper.ContactEmailTable.COLUMN_CONTACT + " = ?",
+                    + "c." + BridgeSQLiteHelper.ContactTable.COLUMN_ID + " = ?",
                 new String[]{Long.toString(contact.getId())}
             );
             emailCursor.moveToFirst();
