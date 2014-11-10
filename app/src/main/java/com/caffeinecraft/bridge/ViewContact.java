@@ -1,10 +1,8 @@
 package com.caffeinecraft.bridge;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -13,9 +11,7 @@ import android.widget.TextView;
 import com.caffeinecraft.bridge.dao.ContactsDataSource;
 import com.caffeinecraft.bridge.model.Contact;
 import com.caffeinecraft.bridge.model.ContactMethod;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ViewContact extends Activity implements View.OnClickListener{
@@ -43,7 +39,6 @@ public class ViewContact extends Activity implements View.OnClickListener{
         }
 
         TextView txtName=(TextView)findViewById(R.id.textName);
-
         txtName.setText(thiscontact.toString());
 
         ListView lv = (ListView) findViewById(R.id.listView);
@@ -61,7 +56,7 @@ public class ViewContact extends Activity implements View.OnClickListener{
                 this,
                 android.R.layout.simple_list_item_1,
                 meansofcontact);
-        //THIS LINE CAUSES ERRORS AND I DON'T KNOW WHY!
+        //TODO: Make this next line not cause errors
         //lv.setAdapter(arrayAdapter);
 
         View btnConversationList = findViewById(R.id.buttonConversationList);
@@ -83,10 +78,14 @@ public class ViewContact extends Activity implements View.OnClickListener{
                 //startActivity(new Intent(this, ConversationList.class));
                 break;
             case R.id.buttonContactList:
-                //startActivity(new Intent(this, ContactList.class));
+                startActivity(new Intent(this, ContactList.class));
                 break;
             case R.id.buttonEditContact:
-                //startActivity(new Intent(this, EditContact.class));
+                Intent intent = new Intent(getApplicationContext(), EditContact.class);
+                Bundle bundle = new Bundle();
+                bundle.putLong("contactid",thiscontact.getId());
+                intent.putExtras(bundle);
+                startActivity(intent);
                 break;
             case R.id.buttonNewMessage:
                 //startActivity(new Intent(this, NewMessage.class));

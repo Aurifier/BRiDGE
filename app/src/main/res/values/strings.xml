@@ -9,8 +9,10 @@
     <string name="phone_contacts">Phone Contacts</string>
     <string name="facebook_friends">Facebook Friends</string>
     <string name="title_activity_import_phone_contacts">Import Phone Contacts</string>
-    <string name="title_activity_contacts_list">Contacts List</string>
+    <string name="title_activity_contact_list">Contact List</string>
     <string name="title_activity_view_contact">View Contact</string>
+    <string name="title_activity_merge_contact">Merge Contact</string>
+    <string name="title_activity_edit_contact">Edit Contact</string>
 
     <!--Button Names-->
     <string name="conversation_list">Conversation List</string>
@@ -21,6 +23,7 @@
 
     <string name="import_contact">Import Contact</string>
     <string name="edit_contact">Edit Contact</string>
+    <string name="merge_contact">Merge Contact</string>
 
     <string name="import_qr_code">Import QR Code</string>
     <string name="export_qr_code">Export QR Code</string>

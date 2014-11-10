@@ -24,8 +24,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/edit_contact"
-        android:id="@+id/buttonEditContact"
+        android:text="@string/merge_contact"
+        android:id="@+id/buttonMergeContact"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
@@ -33,37 +33,43 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/new_message"
-        android:id="@+id/buttonNewMessage"
+        android:text="@string/import_qr_code"
+        android:id="@+id/buttonImportQRCode"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/buttonEditContact"
-        android:layout_toStartOf="@+id/buttonEditContact" />
+        android:layout_toLeftOf="@+id/buttonMergeContact"
+        android:layout_toStartOf="@+id/buttonMergeContact" />
 
-    <Button
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/export_qr_code"
-        android:id="@+id/buttonExportQRCode"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/buttonNewMessage"
-        android:layout_toStartOf="@+id/buttonNewMessage" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/textName"
-        android:layout_below="@+id/buttonExportQRCode"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
+        android:inputType="textPersonName"
+        android:text="First Name"
+        android:ems="10"
+        android:id="@+id/editTextFirstName"
+        android:layout_below="@+id/buttonImportQRCode"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/buttonMergeContact"
+        android:layout_alignEnd="@+id/buttonMergeContact" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Last Name"
+        android:ems="10"
+        android:id="@+id/editTextLastName"
+        android:layout_below="@+id/editTextFirstName"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listView"
-        android:layout_below="@+id/textName"
+        android:layout_below="@+id/editTextLastName"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_above="@+id/buttonConversationList" />
