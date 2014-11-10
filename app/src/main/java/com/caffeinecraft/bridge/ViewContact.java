@@ -60,16 +60,31 @@ public class ViewContact extends Activity implements View.OnClickListener{
         btnConversationList.setOnClickListener(this);
         View btnContactList = findViewById(R.id.buttonContactList);
         btnContactList.setOnClickListener(this);
+        View btnEditContact = findViewById(R.id.buttonEditContact);
+        btnEditContact.setOnClickListener(this);
+        View btnNewMessage = findViewById(R.id.buttonNewMessage);
+        btnNewMessage.setOnClickListener(this);
+        View btnExportQRCode = findViewById(R.id.buttonExportQRCode);
+        btnExportQRCode.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.buttonConversationList:
-                startActivity(new Intent(this, ImportContacts.class));
+                //startActivity(new Intent(this, ConversationList.class));
                 break;
             case R.id.buttonContactList:
-                startActivity(new Intent(this, ContactList.class));
+                //startActivity(new Intent(this, ContactList.class));
+                break;
+            case R.id.buttonEditContact:
+                //startActivity(new Intent(this, EditContact.class));
+                break;
+            case R.id.buttonNewMessage:
+                //startActivity(new Intent(this, NewMessage.class));
+                break;
+            case R.id.buttonExportQRCode:
+                //startActivity(new Intent(this, ExportQRCode.class));
                 break;
         }
     }
