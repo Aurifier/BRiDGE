@@ -71,7 +71,7 @@ public class ContactsDataSource {
             Cursor emailCursor = database.rawQuery(
                 "SELECT "
                     + "e." + BridgeSQLiteHelper.ContactEmailTable.COLUMN_EMAIL
-                + "FROM "
+                + " FROM "
                     + BridgeSQLiteHelper.ContactTable.name + " AS c "
                 + "LEFT JOIN "
                     + BridgeSQLiteHelper.ContactEmailTable.name + " AS e "
