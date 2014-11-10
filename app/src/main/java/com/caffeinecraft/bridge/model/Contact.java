@@ -46,7 +46,10 @@ public class Contact {
 
     @Deprecated
     public String[] getEmails() {
-        return (String[])emails.toArray();
+        //return (String[])emails.toArray();
+        if(emails.get(0)==null)return new String[0];
+        String[] temp = new String[emails.size()];
+        return emails.toArray(temp);
     }
 
     //TODO:
