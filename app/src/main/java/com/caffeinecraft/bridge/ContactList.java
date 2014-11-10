@@ -27,19 +27,22 @@ public class ContactList extends Activity implements View.OnClickListener{
 
         ContactsDataSource foo = new ContactsDataSource(this);
         foo.open();
-        allcontacts = foo.getAllContacts();
 
-        List<String> nameList = new ArrayList<String>();
+        Log.d("BRiDGE","CHECKPOINT ONE");
 
         //Dummy data, until we can get real contacts.
         for(int i = 0; i< 10; i++)
         {
-            Contact temp = new Contact();
-            temp.setFirstName("Player");
-            temp.setLastName("Number " + i);
-            temp.setId( (long) i);
-            allcontacts.add(temp);
+            foo.createContact("Player","Number " + i);
         }
+
+        Log.d("BRiDGE","CONTACTS CREATED");
+
+        allcontacts = foo.getAllContacts();
+
+        Log.d("BRiDGE","CALLED GETALLCONTACTS");
+
+        List<String> nameList = new ArrayList<String>();
 
         for(int i = 0;i<allcontacts.size();i++)
         {
