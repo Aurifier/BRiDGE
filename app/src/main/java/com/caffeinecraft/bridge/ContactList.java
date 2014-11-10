@@ -35,10 +35,13 @@ public class ContactList extends Activity implements View.OnClickListener{
         {
             foo.deleteContact(temp2.get(i));
         }
+        */
+        /*
         for(int i = 0; i< 20; i++)
         {
             foo.createContact("Player","Number " + i);
-        }*/
+        }
+        */
 
         allcontacts = foo.getAllContacts();
 
@@ -86,7 +89,7 @@ public class ContactList extends Activity implements View.OnClickListener{
                 //startActivity(new Intent(this, EditContact.class));
                 break;
             case R.id.buttonImportContact:
-                //startActivity(new Intent(this, ImportContacts.class));
+                startActivity(new Intent(this, ImportContacts.class));
                 break;
             case R.id.buttonConversationList:
                 //startActivity(new Intent(this, ConversationList.class));

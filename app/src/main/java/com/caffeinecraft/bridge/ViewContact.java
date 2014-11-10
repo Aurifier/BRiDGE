@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.caffeinecraft.bridge.dao.ContactsDataSource;
 import com.caffeinecraft.bridge.model.Contact;
+import com.caffeinecraft.bridge.model.ContactMethod;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,9 +47,16 @@ public class ViewContact extends Activity implements View.OnClickListener{
         txtName.setText(thiscontact.toString());
 
         ListView lv = (ListView) findViewById(R.id.listView);
-        String[] emails = thiscontact.getEmails();
-        ArrayList<String> meansofcontact = new ArrayList<String>(Arrays.asList(thiscontact.getEmails()));
-        meansofcontact.add("HELLO");
+        //Updated the following to be not-broken with my changes. Clean up as you like. -Drew
+        List<ContactMethod> contactMethods = thiscontact.getContactMethods();
+        ContactMethod method = new ContactMethod();
+        method.setValue("HELLO");
+        contactMethods.add(method);
+        List<String> meansofcontact = new ArrayList<String>();
+        for(ContactMethod contactMethod : contactMethods) {
+            meansofcontact.add(contactMethod.getValue());
+        }
+
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_1,

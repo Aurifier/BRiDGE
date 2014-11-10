@@ -20,6 +20,7 @@ public class BridgeSQLiteHelper extends SQLiteOpenHelper {
             + ");";
     }
 
+    @Deprecated
     public interface ContactEmailTable {
         public static final String name = "contact_emails";
         public static final String COLUMN_CONTACT = "contact";
@@ -34,8 +35,24 @@ public class BridgeSQLiteHelper extends SQLiteOpenHelper {
             + ");";
     }
 
+    public interface ContactMethodTable {
+        public static final String name = "contact_methods";
+        public static final String COLUMN_CONTACT = "contact";
+        public static final String COLUMN_TYPE = "type";
+        public static final String COLUMN_VALUE = "value";
+
+        public static final String TABLE_CREATE =
+            "CREATE TABLE " + name + "("
+                + COLUMN_CONTACT + " INTEGER, "
+                + COLUMN_VALUE + " TEXT PRIMARY KEY, "
+                + COLUMN_TYPE + " TEXT NOT NULL, "
+                + "FOREIGN KEY(" + COLUMN_CONTACT + ") REFERENCES "
+                + ContactTable.name + "(" + ContactTable.COLUMN_ID + ")"
+            + ");";
+    }
+
     private static final String DATABASE_NAME = "BRiDGE.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public BridgeSQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -44,7 +61,7 @@ public class BridgeSQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(ContactTable.TABLE_CREATE);
-        database.execSQL(ContactEmailTable.TABLE_CREATE);
+        database.execSQL(ContactMethodTable.TABLE_CREATE);
     }
 
     @Override
@@ -57,6 +74,7 @@ public class BridgeSQLiteHelper extends SQLiteOpenHelper {
         if(oldVersion < 5) {
             database.execSQL("DROP TABLE IF EXISTS " + ContactTable.name);
             database.execSQL("DROP TABLE IF EXISTS " + ContactEmailTable.name);
+            database.execSQL("DROP TABLE IF EXISTS " + ContactMethodTable.name);
         }
         onCreate(database);
     }

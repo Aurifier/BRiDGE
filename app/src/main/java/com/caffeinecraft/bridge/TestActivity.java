@@ -22,8 +22,10 @@ public class TestActivity extends Activity implements View.OnClickListener{
         Button buttonContactList = (Button)findViewById(R.id.buttonContactList);
         buttonContactList.setOnClickListener(this);
 
+        //TODO: Make this an AsyncTask or something because it takes forever to create the database
         ContactsDataSource foo = new ContactsDataSource(this);
         foo.open();
+        foo.close();
 
         Log.d("BRiDGE", "Activity created. (onCreate)");
     }

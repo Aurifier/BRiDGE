@@ -5,14 +5,17 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.util.Log;
 
 import com.caffeinecraft.bridge.model.Contact;
 import com.caffeinecraft.bridge.BridgeSQLiteHelper;
+import com.caffeinecraft.bridge.model.ContactMethod;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ContactsDataSource {
+    private static final String TAG = "ContactsDataSource";
     //Database fields
     private SQLiteDatabase database;
     private BridgeSQLiteHelper dbHelper;
@@ -50,18 +53,38 @@ public class ContactsDataSource {
 
     public void deleteContact(Contact contact) {
         long id = contact.getId();
-        //Delete emails for this contact
-        database.delete(BridgeSQLiteHelper.ContactEmailTable.name,
-            BridgeSQLiteHelper.ContactEmailTable.COLUMN_CONTACT + " = ?",
+        //Delete contact methods for this contact
+        database.delete(BridgeSQLiteHelper.ContactMethodTable.name,
+            BridgeSQLiteHelper.ContactMethodTable.COLUMN_CONTACT + " = ?",
             new String[]{Long.toString(id)});
         //Delete the contact
         database.delete(BridgeSQLiteHelper.ContactTable.name,
             BridgeSQLiteHelper.ContactTable.COLUMN_ID + " = ?", new String[]{Long.toString(id)});
     }
 
-    //TODO:
     public void updateContact(Contact contact) {
         //Stub, you can use this and pretend it works until I actually finish it
+        long id = contact.getId();
+
+        //First, update name
+        ContentValues names = new ContentValues();
+        names.put(BridgeSQLiteHelper.ContactTable.COLUMN_FN, contact.getFirstName());
+        names.put(BridgeSQLiteHelper.ContactTable.COLUMN_LN, contact.getLastName());
+        database.update(BridgeSQLiteHelper.ContactTable.name, names,
+            BridgeSQLiteHelper.ContactTable.COLUMN_ID + " =?", new String[]{Long.toString(id)});
+
+        //Then, update contact methods
+        //Because it's easy, we'll nuke 'em all and put 'em back
+        database.delete(BridgeSQLiteHelper.ContactMethodTable.name,
+            BridgeSQLiteHelper.ContactMethodTable.COLUMN_CONTACT + " =?",
+            new String[]{Long.toString(id)});
+        for (ContactMethod method : contact.getContactMethods()) {
+            ContentValues methodValues = new ContentValues();
+            methodValues.put(BridgeSQLiteHelper.ContactMethodTable.COLUMN_CONTACT, id);
+            methodValues.put(BridgeSQLiteHelper.ContactMethodTable.COLUMN_TYPE, method.getType().name());
+            methodValues.put(BridgeSQLiteHelper.ContactMethodTable.COLUMN_VALUE, method.getValue());
+            database.insert(BridgeSQLiteHelper.ContactMethodTable.name, null, methodValues);
+        }
     }
 
     public List<Contact> getAllContacts() {
@@ -73,23 +96,27 @@ public class ContactsDataSource {
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Contact contact = cursorToContact(cursor);
+            //TODO: This fetches all methods and calls them emails
             Cursor emailCursor = database.rawQuery(
                 "SELECT "
-                    + "e." + BridgeSQLiteHelper.ContactEmailTable.COLUMN_EMAIL
+                    + "e." + BridgeSQLiteHelper.ContactMethodTable.COLUMN_VALUE
+                    + ", e." + BridgeSQLiteHelper.ContactMethodTable.COLUMN_TYPE
                 + " FROM "
                     + BridgeSQLiteHelper.ContactTable.name + " AS c "
                 + "LEFT JOIN "
-                    + BridgeSQLiteHelper.ContactEmailTable.name + " AS e "
+                    + BridgeSQLiteHelper.ContactMethodTable.name + " AS e "
                 + "ON "
                     + "c." + BridgeSQLiteHelper.ContactTable.COLUMN_ID + " = "
-                    + " e." + BridgeSQLiteHelper.ContactEmailTable.COLUMN_CONTACT
+                    + " e." + BridgeSQLiteHelper.ContactMethodTable.COLUMN_CONTACT
                 + " WHERE "
                     + "c." + BridgeSQLiteHelper.ContactTable.COLUMN_ID + " = ?",
                 new String[]{Long.toString(contact.getId())}
             );
             emailCursor.moveToFirst();
             while(!emailCursor.isAfterLast()) {
-                contact.addEmail(emailCursor.getString(0));
+                ContactMethod method = cursorToMethod(emailCursor);
+                if(method != null)
+                    contact.addContactMethod(method);
                 emailCursor.moveToNext();
             }
             emailCursor.close();
@@ -107,5 +134,18 @@ public class ContactsDataSource {
         contact.setLastName(cursor.getString(2));
 
         return contact;
+    }
+
+    private ContactMethod cursorToMethod(Cursor cursor) {
+        //I don't know why I have to make this check, but apparently an empty row counts as a result
+        String typeString = cursor.getString(1);
+        if(typeString == null)
+            return null;
+
+        ContactMethod method = new ContactMethod();
+        method.setValue(cursor.getString(0));
+        method.setType(ContactMethod.Type.valueOf(cursor.getString(1)));
+
+        return method;
     }
 }
