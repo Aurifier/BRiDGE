@@ -8,8 +8,10 @@ public class Contact {
     private String firstName;
     private String lastName;
     private List<String> emails;
+    private List<ContactMethod> methods;
 
     public Contact() {
+        methods = new ArrayList<ContactMethod>();
         emails = new ArrayList<String>();
     }
 
@@ -37,12 +39,27 @@ public class Contact {
         this.lastName = name;
     }
 
+    @Deprecated
     public void addEmail(String email) {
         emails.add(email);
     }
 
+    @Deprecated
     public String[] getEmails() {
         return (String[])emails.toArray();
+    }
+
+    //TODO:
+    public void setPreferredContactMethod() {
+
+    }
+
+    public List<ContactMethod> getContactMethods() {
+        return methods;
+    }
+
+    public void addContactMethod(ContactMethod method) {
+        methods.add(method);
     }
 
     @Override
