@@ -59,6 +59,11 @@ public class ContactsDataSource {
             BridgeSQLiteHelper.ContactTable.COLUMN_ID + " = ?", new String[]{Long.toString(id)});
     }
 
+    //TODO:
+    public void updateContact(Contact contact) {
+        //Stub, you can use this and pretend it works until I actually finish it
+    }
+
     public List<Contact> getAllContacts() {
         List<Contact> contacts = new ArrayList<Contact>();
 
