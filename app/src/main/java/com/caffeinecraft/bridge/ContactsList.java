@@ -36,7 +36,7 @@ public class ContactsList extends Activity implements View.OnClickListener{
                 startActivity(new Intent(this, TestActivity.class));
                 break;
             case R.id.buttonImportContact:
-                startActivity(new Intent(this, TestActivity.class));
+                startActivity(new Intent(this, ImportContacts.class));
                 break;
             case R.id.buttonConversationList:
                 startActivity(new Intent(this, TestActivity.class));

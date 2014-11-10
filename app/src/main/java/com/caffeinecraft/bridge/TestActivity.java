@@ -21,8 +21,6 @@ public class TestActivity extends Activity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
-        Button button = (Button)findViewById(R.id.restartButton);
-        button.setOnClickListener(this);
         Button buttonContactList = (Button)findViewById(R.id.buttonContactList);
         buttonContactList.setOnClickListener(this);
 
@@ -104,9 +102,6 @@ public class TestActivity extends Activity implements View.OnClickListener{
         switch(v.getId()) {
             case R.id.buttonContactList:
                 startActivity(new Intent(this, ContactsList.class));
-                break;
-            case R.id.restartButton:
-                startActivity(new Intent(this, ImportContacts.class));
                 break;
         }
     }

@@ -1,5 +1,6 @@
 package com.caffeinecraft.bridge;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,7 +32,8 @@ public class ImportContacts extends ActionBarActivity {
             public void onClick(View view) {
                 switch (contactSourceGroup.getCheckedRadioButtonId()) {
                     case R.id.phone_contacts:
-                        //TODO: import phone contacts
+                        Intent intent = new Intent(view.getContext(), ImportPhoneContacts.class);
+                        startActivity(intent);
                         break;
                     case R.id.facebook_friends:
                         //TODO: import facebook friends
