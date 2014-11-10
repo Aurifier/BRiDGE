@@ -6,15 +6,20 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.caffeinecraft.bridge.dao.ContactsDataSource;
 import com.caffeinecraft.bridge.model.Contact;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ViewContact extends Activity implements View.OnClickListener{
+
+    private Contact thiscontact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,31 +32,29 @@ public class ViewContact extends Activity implements View.OnClickListener{
 
         Bundle bundle = getIntent().getExtras();
         Long contactid = bundle.getLong("contactid");
-        Log.d("BRiDGE", "ACTUAL CONTACTID IS " + contactid);
 
         List<Contact> allcontacts = foo.getAllContacts();
-        List<Contact> thiscontact = new ArrayList<Contact>();
-
-        Log.d("BRiDGE", "POINT ONE");
 
         for(int i = 0;i<allcontacts.size();i++)
         {
-            if(allcontacts.get(i).getId()==contactid) thiscontact.add(allcontacts.get(i));
+            if(allcontacts.get(i).getId()==contactid)
+            {thiscontact = allcontacts.get(i);}
         }
 
         TextView txtName=(TextView)findViewById(R.id.textName);
 
-        Log.d("BRiDGE", "POINT TWO");
+        txtName.setText(thiscontact.toString());
 
-        Log.d("BRiDGE", "ACTUAL CONTACTID IS " + contactid);
-        for(int i = 0; i< allcontacts.size(); i++)
-        {
-            Log.d("BRiDGE", "CONTACT " + i + ", NAMED " + allcontacts.get(i).getLastName() + "'S ID IS " + allcontacts.get(i).getId());
-        }
-
-        txtName.setText(thiscontact.get(0).getFirstName()+" "+thiscontact.get(0).getLastName());
-
-        Log.d("BRiDGE", "POINT THREE");
+        ListView lv = (ListView) findViewById(R.id.listView);
+        String[] emails = thiscontact.getEmails();
+        ArrayList<String> meansofcontact = new ArrayList<String>(Arrays.asList(thiscontact.getEmails()));
+        meansofcontact.add("HELLO");
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_1,
+                meansofcontact);
+        //THIS LINE CAUSES ERRORS AND I DON'T KNOW WHY!
+        //lv.setAdapter(arrayAdapter);
 
         View btnConversationList = findViewById(R.id.buttonConversationList);
         btnConversationList.setOnClickListener(this);
