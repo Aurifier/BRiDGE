@@ -34,7 +34,7 @@ public class ImportPhoneContacts extends ListActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_import_phone_contacts);
+        setContentView(R.layout.activity_import_phone_contacts);
 
         //Create a progress bar
         ProgressBar progressBar = new ProgressBar(this);
@@ -51,7 +51,7 @@ public class ImportPhoneContacts extends ListActivity
         int[] toViews = {android.R.id.text1}; // The TextView in simple_list_item_1
 
         //Create the adaptor
-        mAdaptor = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1, null,
+        mAdaptor = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_multiple_choice, null,
             fromColumns, toViews, 0);
         setListAdapter(mAdaptor);
 
