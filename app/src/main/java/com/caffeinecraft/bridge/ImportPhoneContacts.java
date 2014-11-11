@@ -5,12 +5,16 @@ import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
+import android.database.CursorWrapper;
 import android.provider.ContactsContract;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
@@ -35,6 +39,7 @@ public class ImportPhoneContacts extends ListActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_import_phone_contacts);
+        addListenerOnButton();
 
         //Create a progress bar
         ProgressBar progressBar = new ProgressBar(this);
@@ -58,6 +63,29 @@ public class ImportPhoneContacts extends ListActivity
         getLoaderManager().initLoader(0, null, this);
     }
 
+    private void addListenerOnButton() {
+        Button importButton = (Button)findViewById(R.id.importGo);
+        importButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final SparseBooleanArray checkedItems = getListView().getCheckedItemPositions();
+
+                if(checkedItems == null) {
+                    return;
+                }
+
+                final int checkedElementsCount = checkedItems.size();
+                for(int i = 0; i < checkedElementsCount; i++) {
+                    final int position = checkedItems.keyAt(i);
+                    final boolean isChecked = checkedItems.valueAt(i);
+                    if(isChecked) {
+                        final CursorWrapper blah = (CursorWrapper) getListAdapter().getItem(position);
+                        Log.d("PhoneContactsImport", blah.getString(1));
+                    }
+                }
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
