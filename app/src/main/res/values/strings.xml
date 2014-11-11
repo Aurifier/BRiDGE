@@ -13,6 +13,9 @@
     <string name="title_activity_view_contact">View Contact</string>
     <string name="title_activity_merge_contact">Merge Contact</string>
     <string name="title_activity_edit_contact">Edit Contact</string>
+    <string name="title_activity_conversation_list">Conversation List</string>
+    <string name="title_activity_conversation">Conversation</string>
+    <string name="compose_sms">Compose SMS</string>
 
     <!--Button Names-->
     <string name="conversation_list">Conversation List</string>

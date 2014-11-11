@@ -92,7 +92,7 @@ public class ContactList extends Activity implements View.OnClickListener{
                 startActivity(new Intent(this, ImportContacts.class));
                 break;
             case R.id.buttonConversationList:
-                //startActivity(new Intent(this, ConversationList.class));
+                startActivity(new Intent(this, ConversationList.class));
                 break;
             case R.id.buttonContactList:
                 break;
