@@ -31,15 +31,27 @@
         </activity>
         <activity
             android:name=".ViewContact"
-            android:label="@string/title_activity_view_contact" >
+            android:label="@string/title_activity_view_contact"
+            android:parentActivityName=".ContactList" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.caffeinecraft.bridge.ContactList" />
         </activity>
         <activity
             android:name=".EditContact"
-            android:label="@string/title_activity_edit_contact" >
+            android:label="@string/title_activity_edit_contact"
+            android:parentActivityName=".ViewContact" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.caffeinecraft.bridge.ViewContact" />
         </activity>
         <activity
             android:name=".MergeContact"
-            android:label="@string/title_activity_merge_contact" >
+            android:label="@string/title_activity_merge_contact"
+            android:parentActivityName=".EditContact" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.caffeinecraft.bridge.EditContact" />
         </activity>
         <activity
             android:name=".ImportContacts"

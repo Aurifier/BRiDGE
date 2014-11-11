@@ -65,6 +65,11 @@ public class Contact {
         methods.add(method);
     }
 
+    public void removeContactMethod(ContactMethod method)
+    {
+        methods.remove(methods.indexOf(method));
+    }
+
     @Override
     public String toString() {
         if(lastName != null)

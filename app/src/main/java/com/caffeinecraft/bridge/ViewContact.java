@@ -21,44 +21,40 @@ public class ViewContact extends Activity implements View.OnClickListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        //Generic initialize function calls
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_contact);
-
         ContactsDataSource foo = new ContactsDataSource(this);
         foo.open();
 
+        //Set thiscontact to the correct contact given in the savedInstanceState
         Bundle bundle = getIntent().getExtras();
         Long contactid = bundle.getLong("contactid");
-
         List<Contact> allcontacts = foo.getAllContacts();
-
         for(int i = 0;i<allcontacts.size();i++)
         {
             if(allcontacts.get(i).getId()==contactid)
             {thiscontact = allcontacts.get(i);}
         }
 
+        //Set Text View
         TextView txtName=(TextView)findViewById(R.id.textName);
         txtName.setText(thiscontact.toString());
 
+        //Set List View
         ListView lv = (ListView) findViewById(R.id.listView);
-        //Updated the following to be not-broken with my changes. Clean up as you like. -Drew
         List<ContactMethod> contactMethods = thiscontact.getContactMethods();
-        ContactMethod method = new ContactMethod();
-        method.setValue("HELLO");
-        contactMethods.add(method);
         List<String> meansofcontact = new ArrayList<String>();
         for(ContactMethod contactMethod : contactMethods) {
             meansofcontact.add(contactMethod.getValue());
         }
-
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_1,
                 meansofcontact);
-        //TODO: Make this next line not cause errors
-        //lv.setAdapter(arrayAdapter);
+        lv.setAdapter(arrayAdapter);
 
+        //Set Button Onclicklisteners
         View btnConversationList = findViewById(R.id.buttonConversationList);
         btnConversationList.setOnClickListener(this);
         View btnContactList = findViewById(R.id.buttonContactList);
@@ -75,7 +71,7 @@ public class ViewContact extends Activity implements View.OnClickListener{
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.buttonConversationList:
-                //startActivity(new Intent(this, ConversationList.class));
+                startActivity(new Intent(this, ConversationList.class));
                 break;
             case R.id.buttonContactList:
                 startActivity(new Intent(this, ContactList.class));
