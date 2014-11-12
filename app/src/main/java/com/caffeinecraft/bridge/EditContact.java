@@ -92,7 +92,8 @@ public class EditContact extends Activity implements View.OnClickListener{
             case R.id.buttonSave:
                 thiscontact.setFirstName(editTextFirstName.getText().toString());
                 thiscontact.setLastName(editTextLastName.getText().toString());
-                //TODO: ADD FUNCTIONALITY TO ADD AND REMOVE CONTACTMETHODS
+                //TODO: ADD FUNCTIONALITY TO REMOVE CONTACTMETHODS
+                //TODO: ADD FUNCTIONALITY TO SET PREFERRED CONTACT
                 foo.updateContact(thiscontact);
                 this.finish();
                 break;
