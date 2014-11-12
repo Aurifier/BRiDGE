@@ -88,7 +88,6 @@ public class MergeContact extends Activity implements View.OnClickListener{
                 startActivity(new Intent(this, ContactList.class));
                 break;
             case R.id.buttonMerge:
-                //TODO: Merge Contact
                 List<ContactMethod> meansofcontact = thiscontact.getContactMethods();
                 int len = lv.getCount();
                 SparseBooleanArray checked = lv.getCheckedItemPositions();

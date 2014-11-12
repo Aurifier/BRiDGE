@@ -53,8 +53,13 @@ public class Contact {
     }
 
     //TODO:
-    public void setPreferredContactMethod() {
+    public void setPreferredContactMethod(ContactMethod method) {
 
+    }
+
+    //TODO:
+    public ContactMethod getPreferredContactMethod() {
+        return methods.get(0);
     }
 
     public List<ContactMethod> getContactMethods() {

@@ -22,6 +22,7 @@ public class EditContact extends Activity implements View.OnClickListener{
     ContactsDataSource foo;
     TextView editTextFirstName;
     TextView editTextLastName;
+    ListView lv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class EditContact extends Activity implements View.OnClickListener{
         }
 
         //Set List View
-        ListView lv = (ListView) findViewById(R.id.listView);
+        lv = (ListView) findViewById(R.id.listView);
         List<ContactMethod> contactMethods = thiscontact.getContactMethods();
         List<String> meansofcontact = new ArrayList<String>();
         for(ContactMethod contactMethod : contactMethods) {
@@ -50,8 +51,9 @@ public class EditContact extends Activity implements View.OnClickListener{
         }
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
-                android.R.layout.simple_list_item_1,
+                android.R.layout.simple_list_item_single_choice,
                 meansofcontact);
+        lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         lv.setAdapter(arrayAdapter);
 
         //Set EditTexts
@@ -92,8 +94,8 @@ public class EditContact extends Activity implements View.OnClickListener{
             case R.id.buttonSave:
                 thiscontact.setFirstName(editTextFirstName.getText().toString());
                 thiscontact.setLastName(editTextLastName.getText().toString());
-                //TODO: ADD FUNCTIONALITY TO REMOVE CONTACTMETHODS
-                //TODO: ADD FUNCTIONALITY TO SET PREFERRED CONTACT
+                int selectedItemPosition = lv.getSelectedItemPosition();
+                if(selectedItemPosition>=0){thiscontact.setPreferredContactMethod(thiscontact.getContactMethods().get(selectedItemPosition));}
                 foo.updateContact(thiscontact);
                 this.finish();
                 break;
