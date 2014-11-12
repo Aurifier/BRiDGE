@@ -24,6 +24,7 @@ public class ImportContacts extends ActionBarActivity {
         addListenerOnButton();
     }
 
+    //TODO: Move onClick to class
     public void addListenerOnButton() {
         contactSourceGroup = (RadioGroup) findViewById(R.id.importContactSource);
         dasButton = (Button) findViewById(R.id.importGo);

@@ -19,27 +19,31 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
 
+import com.caffeinecraft.bridge.dao.ContactsDataSource;
+
 
 public class ImportPhoneContacts extends ListActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
     SimpleCursorAdapter mAdaptor;
+    private ContactsDataSource dataSource;
 
-    /*static final String[] PROJECTION = new String[] {ContactsContract.Data._ID,
-            ContactsContract.Data.DISPLAY_NAME};*/
+    static final String[] PROJECTION = new String[] {
+        ContactsContract.Contacts._ID,
+        ContactsContract.Contacts.LOOKUP_KEY,
+        ContactsContract.Contacts.DISPLAY_NAME
+    };
 
-    static final String[] PROJECTION = new String[] {ContactsContract.Contacts._ID,
-            ContactsContract.Contacts.DISPLAY_NAME};
-
-    /*static final String SELECTION = "((" +
-        ContactsContract.Data.DISPLAY_NAME + " NOTNULL) AND (" +
-        ContactsContract.Data.DISPLAY_NAME + " != '' ))";*/
+    static final String SELECTION =
+        ContactsContract.Contacts.IN_VISIBLE_GROUP + " = 1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_import_phone_contacts);
         addListenerOnButton();
+        dataSource = new ContactsDataSource(this);
+        dataSource.open();
 
         //Create a progress bar
         ProgressBar progressBar = new ProgressBar(this);
@@ -63,6 +67,12 @@ public class ImportPhoneContacts extends ListActivity
         getLoaderManager().initLoader(0, null, this);
     }
 
+    @Override
+    protected void onDestroy() {
+        dataSource.close();
+        super.onDestroy();
+    }
+
     private void addListenerOnButton() {
         Button importButton = (Button)findViewById(R.id.importGo);
         importButton.setOnClickListener(new View.OnClickListener() {
@@ -80,7 +90,8 @@ public class ImportPhoneContacts extends ListActivity
                     final boolean isChecked = checkedItems.valueAt(i);
                     if(isChecked) {
                         final CursorWrapper blah = (CursorWrapper) getListAdapter().getItem(position);
-                        Log.d("PhoneContactsImport", blah.getString(1));
+                        importContactByLookupKey(blah.getString(1));
+                        Log.d("PhoneContactsImport", blah.getString(2));
                     }
                 }
             }
@@ -108,7 +119,7 @@ public class ImportPhoneContacts extends ListActivity
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new CursorLoader(this, ContactsContract.Contacts.CONTENT_URI, PROJECTION, null,
+        return new CursorLoader(this, ContactsContract.Contacts.CONTENT_URI, PROJECTION, SELECTION,
             null, null);
     }
 
@@ -126,5 +137,10 @@ public class ImportPhoneContacts extends ListActivity
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         //TODO: Wat do?
+    }
+
+    private void importContactByLookupKey(String key) {
+        //TODO: Get contact name
+
     }
 }
