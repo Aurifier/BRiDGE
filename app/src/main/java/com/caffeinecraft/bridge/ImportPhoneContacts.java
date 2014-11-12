@@ -91,7 +91,6 @@ public class ImportPhoneContacts extends ListActivity
                     if(isChecked) {
                         final CursorWrapper blah = (CursorWrapper) getListAdapter().getItem(position);
                         importContactByLookupKey(blah.getString(1));
-                        Log.d("PhoneContactsImport", blah.getString(2));
                     }
                 }
             }
@@ -140,7 +139,27 @@ public class ImportPhoneContacts extends ListActivity
     }
 
     private void importContactByLookupKey(String key) {
-        //TODO: Get contact name
+        final String[] projection = new String[] {
+            ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME,
+            ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME
+        };
+        final String selection =
+            ContactsContract.Data.MIMETYPE + " = ? AND "
+            +ContactsContract.Data.LOOKUP_KEY + " = ?";
+
+        Cursor contactCursor = getContentResolver().query(
+            ContactsContract.Data.CONTENT_URI, projection, selection, new String[]{
+                ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE,
+                key
+            },
+            ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME
+        );
+
+        contactCursor.moveToFirst();
+        if(!contactCursor.isAfterLast()) {
+            Log.d("ImportPhoneContacts", "First name " + contactCursor.getString(0));
+            Log.d("ImportPhoneContacts", "Last name " + contactCursor.getString(1));
+        }
 
     }
 }
