@@ -6,21 +6,19 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
 import com.caffeinecraft.bridge.dao.ContactsDataSource;
 
 
-public class TestActivity extends Activity implements View.OnClickListener{
+public class TestActivity extends Activity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-
-        Button buttonContactList = (Button)findViewById(R.id.buttonContactList);
-        buttonContactList.setOnClickListener(this);
 
         //TODO: Make this an AsyncTask or something because it takes forever to create the database
         ContactsDataSource foo = new ContactsDataSource(this);
@@ -97,12 +95,10 @@ public class TestActivity extends Activity implements View.OnClickListener{
     }
 
     @Override
-    public void onClick(View v) {
-        Log.d("BRiDGE", "click detected");
-        switch(v.getId()) {
-            case R.id.buttonContactList:
-                startActivity(new Intent(this, ContactList.class));
-                break;
+    public boolean onTouchEvent(MotionEvent evt) {
+        if (evt.getAction() == MotionEvent.ACTION_DOWN) {
+            startActivity(new Intent(this, ContactList.class));
         }
+        return false;
     }
 }

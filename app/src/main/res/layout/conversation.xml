@@ -1,34 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:weightSum="1">
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="2dp"
+    android:orientation="vertical">
 
-
-
-
-    <TextView
-        android:layout_width="385dp"
-        android:layout_height="46dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Contact Name"
-        android:id="@+id/textView" />
-
-    <ScrollView
+    <ListView
+        android:id="@+id/listview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/scrollView" >
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:overScrollMode="always"
+        android:stackFromBottom="true"
+        android:layout_marginBottom="5dp"/>
 
-        <ListView
+    <LinearLayout
+        android:id="@+id/sendMsgLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/messageText"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:maxLines="3" >
+
+            <requestFocus />
+        </EditText>
+
+        <ImageView
+            android:id="@+id/imageSend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/listView" />
-    </ScrollView>
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:id="@+id/editText"
-        android:layout_weight="1" />
+            android:src="@drawable/ic_launcher" />
+    </LinearLayout>
 </LinearLayout>

@@ -1,44 +1,53 @@
 package com.caffeinecraft.bridge;
 
-import android.app.ActionBar;
-import android.app.ListActivity;
-import android.app.LoaderManager;
-import android.content.CursorLoader;
+import android.app.Activity;
 import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.SimpleCursorAdapter;
+
 
 /**
  * Created by ronitkumar on 11/10/14.
  */
-public class ConversationList extends ListActivity{
-    String[] contactName = new String[] { "Contact One", "Contact Two", "Contact Three",
+public class ConversationList extends Activity implements View.OnClickListener {
+    String[] contactName = new String[]{"Contact One", "Contact Two", "Contact Three",
             "Contact Four", "Contact Five", "Contact Six", "Contact Seven", "Contact Eight",
-            "Contact Nine", "Contact Ten" };
+            "Contact Nine", "Contact Ten"};
 
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         // use your custom layout
+        setContentView(R.layout.activity_conversation_list);
+        ListView lv = (ListView) findViewById(R.id.listView);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 R.layout.conversation_view, R.id.firstLine, contactName);
-        setListAdapter(adapter);
+        lv.setAdapter(adapter);
+
+
+        //Set what happens when you click on something in listview
+        lv.setOnItemClickListener(new ListView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> a, View v, int i, long l) {
+                Intent intent = new Intent(getApplicationContext(), Conversation.class);
+                intent.putExtra("id", String.valueOf(l));
+                intent.putExtra("Contact", contactName[i]);
+                startActivity(intent);
+            }
+        });
+
+        View btnNewMessage = findViewById(R.id.buttonNewMessage);
+        btnNewMessage.setOnClickListener(this);
     }
 
-
     @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        Intent intent = new Intent(this, Conversation.class);
-        intent.putExtra("id", String.valueOf(id));
-        intent.putExtra("Contact", contactName[position]);
-        startActivity(intent);
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.buttonNewMessage:
+                Intent intent = new Intent(getApplicationContext(), Conversation.class);
+                startActivity(intent);
+                break;
+        }
     }
 }
