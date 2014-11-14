@@ -10,6 +10,10 @@
     <uses-permission android:name="android.permission.WRITE_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_MMS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
 
     <application
@@ -28,6 +32,11 @@
         <activity
             android:name=".ContactList"
             android:label="@string/title_activity_contact_list" >
+        </activity>
+        <activity
+            android:name=".QRScanner"
+            android:label="@string/title_activity_qrscanner"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ViewContact"

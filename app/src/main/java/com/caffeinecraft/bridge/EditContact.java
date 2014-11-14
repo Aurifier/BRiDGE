@@ -100,7 +100,7 @@ public class EditContact extends Activity implements View.OnClickListener{
                 this.finish();
                 break;
             case R.id.buttonImportQRCode:
-                //startActivity(new Intent(this, ImportQRCode.class));
+                startActivity(new Intent(getApplicationContext(), QRScanner.class));
                 break;
         }
     }
