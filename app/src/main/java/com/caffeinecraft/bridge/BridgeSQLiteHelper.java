@@ -7,7 +7,7 @@ import android.util.Log;
 
 public class BridgeSQLiteHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "BRiDGE.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     public interface ContactTable {
         public static final String name = "contacts";
@@ -49,6 +49,7 @@ public class BridgeSQLiteHelper extends SQLiteOpenHelper {
         public static final String COLUMN_CONTACT = "contact";
         public static final String COLUMN_RECEIVED = "received";
         public static final String COLUMN_TIMESTAMP = "timestamp";
+        public static final String COLUMN_MESSAGE = "message";
 
         public static final String TABLE_CREATE =
             "CREATE TABLE " + name + "("
@@ -56,6 +57,7 @@ public class BridgeSQLiteHelper extends SQLiteOpenHelper {
                 + COLUMN_CONTACT + " INTEGER NOT NULL, "
                 + COLUMN_RECEIVED + " INTEGER NOT NULL, "
                 + COLUMN_TIMESTAMP + " INTEGER, "
+                + COLUMN_MESSAGE + " TEXT, "
                 + "FOREIGN KEY(" + COLUMN_CONTACT + ") REFERENCES "
                 + ContactTable.name + "(" + ContactTable.COLUMN_ID + ")"
             + ");";
