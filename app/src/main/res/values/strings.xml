@@ -15,6 +15,7 @@
     <string name="title_activity_edit_contact">Edit Contact</string>
     <string name="title_activity_conversation_list">Conversation List</string>
     <string name="title_activity_conversation">Conversation</string>
+    <string name="title_activity_qrscanner">QRScanner</string>
     <string name="compose_sms">Compose SMS</string>
 
     <!--Button Names-->
@@ -35,6 +36,7 @@
     <string name="link_to_email_or_social_media">Link to Email or Social Media</string>
     <string name="import_this">Import</string>
     <string name="save">Save</string>
+    <string name="delete">Delete</string>
     <string name="link">Link</string>
     <string name="send">Send</string>
     <string name="merge">Merge</string>

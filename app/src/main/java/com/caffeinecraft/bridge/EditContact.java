@@ -73,6 +73,8 @@ public class EditContact extends Activity implements View.OnClickListener{
         btnImportQRCode.setOnClickListener(this);
         View btnSave = findViewById(R.id.buttonSave);
         btnSave.setOnClickListener(this);
+        View btnDelete = findViewById(R.id.buttonDelete);
+        btnDelete.setOnClickListener(this);
     }
 
     @Override
@@ -99,8 +101,12 @@ public class EditContact extends Activity implements View.OnClickListener{
                 foo.updateContact(thiscontact);
                 this.finish();
                 break;
+            case R.id.buttonDelete:
+                foo.deleteContact(thiscontact);
+                this.finish();
+                break;
             case R.id.buttonImportQRCode:
-                //startActivity(new Intent(this, ImportQRCode.class));
+                startActivity(new Intent(getApplicationContext(), QRScanner.class));
                 break;
         }
     }
