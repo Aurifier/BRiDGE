@@ -5,34 +5,25 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-//TODO: Include foreign key from Contact(preferred_method) to ContactMethod
 public class BridgeSQLiteHelper extends SQLiteOpenHelper {
+    private static final String DATABASE_NAME = "BRiDGE.db";
+    private static final int DATABASE_VERSION = 3;
+
     public interface ContactTable {
         public static final String name = "contacts";
         public static final String COLUMN_ID = "_id";
         public static final String COLUMN_FN = "first_name";
         public static final String COLUMN_LN = "last_name";
+        public static final String COLUMN_PREFERRED_METHOD = "preferred";
 
         public static final String TABLE_CREATE =
             "CREATE TABLE " + name + "("
                 + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COLUMN_FN + " TEXT NOT NULL, "
-                + COLUMN_LN + " TEXT"
-            + ");";
-    }
-
-    @Deprecated
-    public interface ContactEmailTable {
-        public static final String name = "contact_emails";
-        public static final String COLUMN_CONTACT = "contact";
-        public static final String COLUMN_EMAIL = "email";
-
-        public static final String TABLE_CREATE =
-            "CREATE TABLE " + name + "("
-                + COLUMN_CONTACT + " INTEGER PRIMARY KEY, "
-                + COLUMN_EMAIL + " TEXT NOT NULL, "
-                + "FOREIGN KEY(" + COLUMN_CONTACT + ") REFERENCES "
-                + ContactTable.name + "(" + ContactTable.COLUMN_ID + ")"
+                + COLUMN_LN + " TEXT, "
+                + COLUMN_PREFERRED_METHOD + " TEXT, "
+                + "FOREIGN KEY(" + COLUMN_PREFERRED_METHOD + ") REFERENCES "
+                + ContactMethodTable.name + "(" + ContactMethodTable.COLUMN_VALUE + ")"
             + ");";
     }
 
@@ -52,8 +43,23 @@ public class BridgeSQLiteHelper extends SQLiteOpenHelper {
             + ");";
     }
 
-    private static final String DATABASE_NAME = "BRiDGE.db";
-    private static final int DATABASE_VERSION = 2;
+    public interface ConversationTable {
+        public static final String name = "conversations";
+        public static final String COLUMN_ID = "_id";
+        public static final String COLUMN_CONTACT = "contact";
+        public static final String COLUMN_RECEIVED = "received";
+        public static final String COLUMN_TIMESTAMP = "timestamp";
+
+        public static final String TABLE_CREATE =
+            "CREATE TABLE " + name + "("
+                + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COLUMN_CONTACT + " INTEGER NOT NULL, "
+                + COLUMN_RECEIVED + " INTEGER NOT NULL, "
+                + COLUMN_TIMESTAMP + " INTEGER, "
+                + "FOREIGN KEY(" + COLUMN_CONTACT + ") REFERENCES "
+                + ContactTable.name + "(" + ContactTable.COLUMN_ID + ")"
+            + ");";
+    }
 
     public BridgeSQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -63,6 +69,7 @@ public class BridgeSQLiteHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(ContactTable.TABLE_CREATE);
         database.execSQL(ContactMethodTable.TABLE_CREATE);
+        database.execSQL(ConversationTable.TABLE_CREATE);
     }
 
     @Override
@@ -73,9 +80,9 @@ public class BridgeSQLiteHelper extends SQLiteOpenHelper {
 
         //While we're testing, just drop everything and rebuild
         if(oldVersion < 5) {
-            database.execSQL("DROP TABLE IF EXISTS " + ContactTable.name);
-            database.execSQL("DROP TABLE IF EXISTS " + ContactEmailTable.name);
             database.execSQL("DROP TABLE IF EXISTS " + ContactMethodTable.name);
+            database.execSQL("DROP TABLE IF EXISTS " + ContactTable.name);
+            database.execSQL("DROP TABLE IF EXISTS " + ConversationTable.name);
         }
         onCreate(database);
     }
