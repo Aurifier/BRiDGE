@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+//TODO: Include foreign key from Contact(preferred_method) to ContactMethod
 public class BridgeSQLiteHelper extends SQLiteOpenHelper {
     public interface ContactTable {
         public static final String name = "contacts";

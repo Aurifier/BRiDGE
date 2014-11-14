@@ -62,6 +62,7 @@ public class ContactsDataSource {
             BridgeSQLiteHelper.ContactTable.COLUMN_ID + " = ?", new String[]{Long.toString(id)});
     }
 
+    //TODO: Set preferred method
     public void updateContact(Contact contact) {
         //Stub, you can use this and pretend it works until I actually finish it
         long id = contact.getId();
@@ -87,6 +88,7 @@ public class ContactsDataSource {
         }
     }
 
+    //TODO: Get preferred method for each contact
     public List<Contact> getAllContacts() {
         List<Contact> contacts = new ArrayList<Contact>();
 

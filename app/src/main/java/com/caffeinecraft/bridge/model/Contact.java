@@ -9,6 +9,7 @@ public class Contact {
     private String lastName;
     private List<String> emails;
     private List<ContactMethod> methods;
+    private ContactMethod preferredMethod;
 
     public Contact() {
         methods = new ArrayList<ContactMethod>();
@@ -52,14 +53,12 @@ public class Contact {
         return emails.toArray(temp);
     }
 
-    //TODO:
     public void setPreferredContactMethod(ContactMethod method) {
-
+        preferredMethod = method;
     }
 
-    //TODO:
     public ContactMethod getPreferredContactMethod() {
-        return methods.get(0);
+        return preferredMethod;
     }
 
     public List<ContactMethod> getContactMethods() {
