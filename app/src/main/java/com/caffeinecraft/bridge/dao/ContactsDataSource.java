@@ -51,6 +51,22 @@ public class ContactsDataSource {
         return newContact;
     }
 
+    public Contact getContact(long id) {
+        Contact contact = null;
+        Cursor cursor = database.query(BridgeSQLiteHelper.ContactTable.name, allColumns,
+            BridgeSQLiteHelper.ContactTable.COLUMN_ID + " =?", new String[]{Long.toString(id)},
+            null, null, null);
+
+        cursor.moveToFirst();
+        if(!cursor.isAfterLast()) {
+            contact = cursorToContact(cursor);
+            addContactMethods(contact);
+        }
+        cursor.close();
+
+        return contact;
+    }
+
     public void deleteContact(Contact contact) {
         long id = contact.getId();
         //Delete contact methods for this contact
@@ -98,30 +114,7 @@ public class ContactsDataSource {
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Contact contact = cursorToContact(cursor);
-            //TODO: This fetches all methods and calls them emails
-            Cursor emailCursor = database.rawQuery(
-                "SELECT "
-                    + "e." + BridgeSQLiteHelper.ContactMethodTable.COLUMN_VALUE
-                    + ", e." + BridgeSQLiteHelper.ContactMethodTable.COLUMN_TYPE
-                + " FROM "
-                    + BridgeSQLiteHelper.ContactTable.name + " AS c "
-                + "LEFT JOIN "
-                    + BridgeSQLiteHelper.ContactMethodTable.name + " AS e "
-                + "ON "
-                    + "c." + BridgeSQLiteHelper.ContactTable.COLUMN_ID + " = "
-                    + " e." + BridgeSQLiteHelper.ContactMethodTable.COLUMN_CONTACT
-                + " WHERE "
-                    + "c." + BridgeSQLiteHelper.ContactTable.COLUMN_ID + " = ?",
-                new String[]{Long.toString(contact.getId())}
-            );
-            emailCursor.moveToFirst();
-            while(!emailCursor.isAfterLast()) {
-                ContactMethod method = cursorToMethod(emailCursor);
-                if(method != null)
-                    contact.addContactMethod(method);
-                emailCursor.moveToNext();
-            }
-            emailCursor.close();
+            addContactMethods(contact);
             contacts.add(contact);
             cursor.moveToNext();
         }
@@ -149,5 +142,31 @@ public class ContactsDataSource {
         method.setType(ContactMethod.Type.valueOf(cursor.getString(1)));
 
         return method;
+    }
+
+    private void addContactMethods(Contact contact) {
+        Cursor methodCursor = database.rawQuery(
+            "SELECT "
+                + "e." + BridgeSQLiteHelper.ContactMethodTable.COLUMN_VALUE
+                + ", e." + BridgeSQLiteHelper.ContactMethodTable.COLUMN_TYPE
+            + " FROM "
+                + BridgeSQLiteHelper.ContactTable.name + " AS c "
+            + "LEFT JOIN "
+                + BridgeSQLiteHelper.ContactMethodTable.name + " AS e "
+            + "ON "
+                + "c." + BridgeSQLiteHelper.ContactTable.COLUMN_ID + " = "
+                + " e." + BridgeSQLiteHelper.ContactMethodTable.COLUMN_CONTACT
+            + " WHERE "
+                + "c." + BridgeSQLiteHelper.ContactTable.COLUMN_ID + " = ?",
+            new String[]{Long.toString(contact.getId())}
+        );
+        methodCursor.moveToFirst();
+        while(!methodCursor.isAfterLast()) {
+            ContactMethod method = cursorToMethod(methodCursor);
+            if(method != null)
+                contact.addContactMethod(method);
+            methodCursor.moveToNext();
+        }
+        methodCursor.close();
     }
 }

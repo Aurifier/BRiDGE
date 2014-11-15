@@ -26,7 +26,10 @@ public class ConversationViewAdapter extends ArrayAdapter{
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View rowView = inflater.inflate(R.layout.conversation_view, parent, false);
-            TextView textView = (TextView) rowView.findViewById(R.id.secondLine);
+            //TODO: I had to replace this line
+            //TextView textView = (TextView) rowView.findViewById(R.id.secondLine);
+            //TODO: with this one because secondLine is gone, but I don't know if that's correct
+            TextView textView = (TextView) rowView.findViewById(R.id.firstLine);
             ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
             textView.setText(values[position]);
             // change the icon for Windows and iPhone

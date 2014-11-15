@@ -70,10 +70,8 @@ public class ConversationScreen extends Activity implements View.OnClickListener
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.buttonSave:
-                Message m = new Message();
-                m.setText(message.getText().toString());
+                Message m = foo.createMessage(thisconversation.getContact(), false, message.getText().toString());
                 thisconversation.addMessage(m);
-//                foo.updateConversation(thisconversation);
                 this.recreate();
                 break;
         }
