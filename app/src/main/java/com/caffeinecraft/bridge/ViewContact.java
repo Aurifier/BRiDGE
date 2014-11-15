@@ -84,7 +84,9 @@ public class ViewContact extends Activity implements View.OnClickListener{
                 startActivity(intent);
                 break;
             case R.id.buttonNewMessage:
-                //startActivity(new Intent(this, NewMessage.class));
+                Intent intent1 = new Intent(this, ConversationScreen.class);
+                intent1.putExtra("contact_id", thiscontact.getId());
+                startActivity(intent1);
                 break;
             case R.id.buttonExportQRCode:
                 //startActivity(new Intent(this, ExportQRCode.class));

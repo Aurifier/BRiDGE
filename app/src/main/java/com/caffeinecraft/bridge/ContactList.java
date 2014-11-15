@@ -101,6 +101,7 @@ public class ContactList extends Activity implements View.OnClickListener{
                 startActivity(new Intent(this, ConversationList.class));
                 break;
             case R.id.buttonContactList:
+                this.recreate();
                 break;
         }
     }

@@ -8,6 +8,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.caffeinecraft.bridge.dao.ConversationDataSource;
+import com.caffeinecraft.bridge.model.Conversation;
+
+import java.util.List;
+
 
 /**
  * Created by ronitkumar on 11/10/14.
@@ -16,14 +21,19 @@ public class ConversationList extends Activity implements View.OnClickListener {
     String[] contactName = new String[]{"Contact One", "Contact Two", "Contact Three",
             "Contact Four", "Contact Five", "Contact Six", "Contact Seven", "Contact Eight",
             "Contact Nine", "Contact Ten"};
+    private ConversationDataSource foo;
+    private List<Conversation> conversationList;
 
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         // use your custom layout
         setContentView(R.layout.activity_conversation_list);
+        foo = new ConversationDataSource(this);
+        foo.open();
         ListView lv = (ListView) findViewById(R.id.listView);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                R.layout.conversation_view, R.id.firstLine, contactName);
+        conversationList = foo.getAllConversations();
+        ArrayAdapter<Conversation> adapter = new ArrayAdapter<Conversation>(this,
+                R.layout.conversation_view, R.id.firstLine, conversationList);
         lv.setAdapter(adapter);
 
 
@@ -33,6 +43,7 @@ public class ConversationList extends Activity implements View.OnClickListener {
                 Intent intent = new Intent(getApplicationContext(), ConversationScreen.class);
                 intent.putExtra("id", String.valueOf(l));
                 intent.putExtra("Contact", contactName[i]);
+                intent.putExtra("contact_id", conversationList.get(i).getContact().getId());
                 startActivity(intent);
             }
         });

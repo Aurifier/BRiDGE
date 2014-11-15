@@ -2,11 +2,13 @@ package com.caffeinecraft.bridge;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.caffeinecraft.bridge.dao.ContactsDataSource;
 import com.caffeinecraft.bridge.dao.ConversationDataSource;
 import com.caffeinecraft.bridge.model.Contact;
 import com.caffeinecraft.bridge.model.Conversation;
@@ -21,7 +23,8 @@ import java.util.List;
 public class ConversationScreen extends Activity implements View.OnClickListener{
 
     private Conversation thisconversation;
-    ConversationDataSource foo;
+    ConversationDataSource conversationDataSource;
+    ContactsDataSource contactsDataSource;
     TextView message;
     ListView lv;
 
@@ -30,32 +33,35 @@ public class ConversationScreen extends Activity implements View.OnClickListener
         //Generic initialize function calls
         super.onCreate(savedInstanceState);
         setContentView(R.layout.conversation);
-//        foo = new ConversationDataSource(this);
-//        foo.open();
+        conversationDataSource = new ConversationDataSource(this);
+        contactsDataSource = new ContactsDataSource(this);
+        conversationDataSource.open();
+        contactsDataSource.open();
 
         //Set thiscontact to the correct contact given in the savedInstanceState
         Bundle bundle = getIntent().getExtras();
-        Long messageid = bundle.getLong("messageid");
-//        List<Contact> allconversations = foo.getAllConversations();
-//        for(int i = 0;i<allconversations.size();i++)
-//        {
-//            if(allconversations.get(i).getId()==messageid)
-//            {thisconversation = allconversations.get(i);}
-//        }
+        Long contactId = bundle.getLong("contact_id");
+        Contact contact = contactsDataSource.getContact(contactId);
+        thisconversation = conversationDataSource.getConversation(contact);
+        List<Conversation> allconversations = conversationDataSource.getAllConversations();
 
         //Set List View
-        lv = (ListView) findViewById(R.id.listView);
+        lv = (ListView) findViewById(R.id.listview);
         List<Message> messages = thisconversation.getMessages();
         List<String> messagesTwo = new ArrayList<String>();
-//        for(Message message : messagesTwo) {
-//            messagesTwo.add(message.getValue());
-//        }
+        for(Message message : messages) {
+            messagesTwo.add(message.getText());
+        }
 
         //Implement custom adapter here for listview chat bubbles
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
                 R.layout.conversation_view,
+                R.id.firstLine,
                 messagesTwo);
+        if(lv == null) {
+            Log.e("ConversationScreen", "List view is null! NOOOOOOOO!");
+        }
         lv.setAdapter(arrayAdapter);
 
         //Set EditTexts
@@ -69,8 +75,8 @@ public class ConversationScreen extends Activity implements View.OnClickListener
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
-            case R.id.buttonSave:
-                Message m = foo.createMessage(thisconversation.getContact(), false, message.getText().toString());
+            case R.id.imageSend:
+                Message m = conversationDataSource.createMessage(thisconversation.getContact(), false, message.getText().toString());
                 thisconversation.addMessage(m);
                 this.recreate();
                 break;

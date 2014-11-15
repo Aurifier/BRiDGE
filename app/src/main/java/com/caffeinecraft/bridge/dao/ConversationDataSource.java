@@ -110,10 +110,10 @@ public class ConversationDataSource {
 
     private Message cursorToMessage(Cursor cursor) {
         Message message = new Message();
-        boolean received = cursor.getInt(1) == 1;
+        boolean received = cursor.getInt(0) == 1;
         message.setReceived(received);
-        message.setText(cursor.getString(3));
-        message.setTimestamp(cursor.getLong(4));
+        message.setText(cursor.getString(1));
+        message.setTimestamp(cursor.getLong(2));
 
         return message;
     }

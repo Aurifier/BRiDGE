@@ -26,4 +26,9 @@ public class Conversation {
     public void addMessage(Message message) {
         messages.add(message);
     }
+
+    @Override
+    public String toString() {
+        return contact.getFirstName() + " " + contact.getLastName();
+    }
 }
