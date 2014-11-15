@@ -30,7 +30,7 @@ public class ConversationList extends Activity implements View.OnClickListener {
         //Set what happens when you click on something in listview
         lv.setOnItemClickListener(new ListView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> a, View v, int i, long l) {
-                Intent intent = new Intent(getApplicationContext(), Conversation.class);
+                Intent intent = new Intent(getApplicationContext(), ConversationScreen.class);
                 intent.putExtra("id", String.valueOf(l));
                 intent.putExtra("Contact", contactName[i]);
                 startActivity(intent);
@@ -45,7 +45,7 @@ public class ConversationList extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.buttonNewMessage:
-                Intent intent = new Intent(getApplicationContext(), Conversation.class);
+                Intent intent = new Intent(getApplicationContext(), ConversationScreen.class);
                 startActivity(intent);
                 break;
         }
