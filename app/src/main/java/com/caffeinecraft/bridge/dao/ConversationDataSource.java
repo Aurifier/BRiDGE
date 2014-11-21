@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.caffeinecraft.bridge.BridgeSQLiteHelper;
 import com.caffeinecraft.bridge.model.Contact;
@@ -54,7 +55,11 @@ public class ConversationDataSource {
         values.put(BridgeSQLiteHelper.ConversationTable.COLUMN_MESSAGE, message);
         values.put(BridgeSQLiteHelper.ConversationTable.COLUMN_TIMESTAMP, System.currentTimeMillis()/1000L);
         long insertId = database.insert(BridgeSQLiteHelper.ConversationTable.name, null, values);
-        Cursor cursor = database.query(BridgeSQLiteHelper.ConversationTable.name, allColumns,
+        Cursor cursor = database.query(BridgeSQLiteHelper.ConversationTable.name, new String[] {
+                BridgeSQLiteHelper.ConversationTable.COLUMN_RECEIVED,
+                BridgeSQLiteHelper.ConversationTable.COLUMN_MESSAGE,
+                BridgeSQLiteHelper.ConversationTable.COLUMN_TIMESTAMP
+            },
             BridgeSQLiteHelper.ConversationTable.COLUMN_ID + " = ?", new String[]{Long.toString(insertId)},
             null, null, null);
         cursor.moveToFirst();
