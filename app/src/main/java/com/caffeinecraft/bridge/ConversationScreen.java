@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.caffeinecraft.bridge.dao.ContactsDataSource;
 import com.caffeinecraft.bridge.dao.ConversationDataSource;
@@ -118,7 +119,16 @@ public class ConversationScreen extends Activity implements View.OnClickListener
     }
 
     private static void sendEmail(String address, String message) {
-        Log.w(TAG, "STUB: Should be sending '" + message + "' to " + address);
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("message/rfc822");
+        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{address});
+        i.putExtra(Intent.EXTRA_SUBJECT, message);
+        i.putExtra(Intent.EXTRA_TEXT   , message);
+        try {
+            mContext.startActivity(Intent.createChooser(i, "Send mail..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(mContext, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private static void sendSMS(String phoneNumber, String message) {
