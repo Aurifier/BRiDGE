@@ -3,6 +3,7 @@ package com.caffeinecraft.bridge;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -96,8 +97,13 @@ public class EditContact extends Activity implements View.OnClickListener{
             case R.id.buttonSave:
                 thiscontact.setFirstName(editTextFirstName.getText().toString());
                 thiscontact.setLastName(editTextLastName.getText().toString());
-                int selectedItemPosition = lv.getSelectedItemPosition();
-                if(selectedItemPosition>=0){thiscontact.setPreferredContactMethod(thiscontact.getContactMethods().get(selectedItemPosition));}
+                int selectedItemPosition = lv.getCheckedItemPosition();
+                Log.d("EditContact", "Selected: " + selectedItemPosition);
+                if(selectedItemPosition>=0){
+                    ContactMethod preference = thiscontact.getContactMethods().get(selectedItemPosition);
+                    Log.d("EditContact", preference.getValue());
+                    thiscontact.setPreferredContactMethod(preference);
+                }
                 foo.updateContact(thiscontact);
                 this.finish();
                 break;

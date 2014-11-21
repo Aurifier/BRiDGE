@@ -29,6 +29,7 @@ public class ConversationScreen extends Activity implements View.OnClickListener
     private static String SENT = "SMS_SENT";
     private static String DELIVERED = "SMS_DELIVERED";
     private static int MAX_SMS_MESSAGE_LENGTH = 160;
+    private static String TAG = "ConversationScreen";
 
     private Conversation thisconversation;
     ConversationDataSource conversationDataSource;
@@ -89,7 +90,6 @@ public class ConversationScreen extends Activity implements View.OnClickListener
                 Contact contact = thisconversation.getContact();
                 Message m = conversationDataSource.createMessage(contact, false, message.getText().toString());
                 thisconversation.addMessage(m);
-                Log.d("ConversationScreen", "Hoping to send the text '" + m.getText() + "'");
                 sendMessage(contact, m);
                 this.recreate();
                 break;
@@ -99,19 +99,26 @@ public class ConversationScreen extends Activity implements View.OnClickListener
     private static void sendMessage(Contact contact, Message message) {
         ContactMethod method = contact.getPreferredContactMethod();
         if(method == null) {
-            List<ContactMethod> methods = contact.getContactMethods();
-            for(ContactMethod m : methods) {
-                if(m != null && m.getType() == ContactMethod.Type.SMS) {
-                    Log.v("ConversationScreen", "Sending message '" + message.getText() + "' to " + m.getValue());
-                    sendSMS(m.getValue(), message.getText());
-                    return;
-                }
-            }
+            //TODO: Offer a toast saying you haven't set up a preferred method for this contact
+            Log.e(TAG, "No preferred method set up for this contact!");
+            return;
         }
 
-        if(method.getType() == ContactMethod.Type.SMS) {
-            sendSMS(method.getValue(), message.getText());
+        switch (method.getType()) {
+            case SMS:
+                sendSMS(method.getValue(), message.getText());
+                break;
+            case EMAIL:
+                sendEmail(method.getValue(), message.getText());
+                break;
+            default:
+                Log.e(TAG, "Unknown contact method type.");
+                break;
         }
+    }
+
+    private static void sendEmail(String address, String message) {
+        Log.w(TAG, "STUB: Should be sending '" + message + "' to " + address);
     }
 
     private static void sendSMS(String phoneNumber, String message) {

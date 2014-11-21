@@ -22,7 +22,8 @@ public class ContactsDataSource {
     private String[] allColumns = {
         BridgeSQLiteHelper.ContactTable.COLUMN_ID,
         BridgeSQLiteHelper.ContactTable.COLUMN_FN,
-        BridgeSQLiteHelper.ContactTable.COLUMN_LN
+        BridgeSQLiteHelper.ContactTable.COLUMN_LN,
+        BridgeSQLiteHelper.ContactTable.COLUMN_PREFERRED_METHOD
     };
 
     public ContactsDataSource(Context context) {
@@ -78,7 +79,6 @@ public class ContactsDataSource {
             BridgeSQLiteHelper.ContactTable.COLUMN_ID + " = ?", new String[]{Long.toString(id)});
     }
 
-    //TODO: Set preferred method
     public void updateContact(Contact contact) {
         //Stub, you can use this and pretend it works until I actually finish it
         long id = contact.getId();
@@ -102,9 +102,16 @@ public class ContactsDataSource {
             methodValues.put(BridgeSQLiteHelper.ContactMethodTable.COLUMN_VALUE, method.getValue());
             database.insert(BridgeSQLiteHelper.ContactMethodTable.name, null, methodValues);
         }
+
+        //Set preferred method
+        if(contact.getPreferredContactMethod() != null) {
+            ContentValues preference = new ContentValues();
+            preference.put(BridgeSQLiteHelper.ContactTable.COLUMN_PREFERRED_METHOD, contact.getPreferredContactMethod().getValue());
+            database.update(BridgeSQLiteHelper.ContactTable.name, preference,
+                    BridgeSQLiteHelper.ContactTable.COLUMN_ID + " =?", new String[]{Long.toString(id)});
+        }
     }
 
-    //TODO: Get preferred method for each contact
     public List<Contact> getAllContacts() {
         List<Contact> contacts = new ArrayList<Contact>();
 
@@ -127,8 +134,32 @@ public class ContactsDataSource {
         contact.setId(cursor.getLong(0));
         contact.setFirstName(cursor.getString(1));
         contact.setLastName(cursor.getString(2));
+        contact.setPreferredContactMethod(getMethodByValue(cursor.getString(3)));
 
         return contact;
+    }
+
+    private ContactMethod getMethodByValue(String value) {
+        if(value == null)
+            return null;
+
+        Log.d(TAG, "Looking for contact method: " + value);
+        Cursor methodCursor = database.rawQuery(
+            "SELECT "
+                + BridgeSQLiteHelper.ContactMethodTable.COLUMN_VALUE + ", "
+                + BridgeSQLiteHelper.ContactMethodTable.COLUMN_TYPE
+            + " FROM "
+                + BridgeSQLiteHelper.ContactMethodTable.name
+            + " WHERE "
+                + BridgeSQLiteHelper.ContactMethodTable.COLUMN_VALUE + " = ?",
+            new String[]{value}
+        );
+
+        methodCursor.moveToFirst();
+        if(methodCursor.isAfterLast()) {
+            Log.e(TAG, "Missing contact method with value '" + value + "'. Bad juju.");
+        }
+        return cursorToMethod(methodCursor);
     }
 
     private ContactMethod cursorToMethod(Cursor cursor) {
