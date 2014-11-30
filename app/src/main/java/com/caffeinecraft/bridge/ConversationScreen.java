@@ -51,7 +51,11 @@ public class ConversationScreen extends Activity implements View.OnClickListener
 
         //Set thiscontact to the correct contact given in the savedInstanceState
         Bundle bundle = getIntent().getExtras();
+
+        //This line needs to be edited for conversation list
         Long contactId = bundle.getLong("contact_id");
+        //
+
         Contact contact = contactsDataSource.getContact(contactId);
         thisconversation = conversationDataSource.getConversation(contact);
         List<Conversation> allconversations = conversationDataSource.getAllConversations();

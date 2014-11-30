@@ -1,6 +1,7 @@
 package com.caffeinecraft.bridge;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,28 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 import android.widget.Toast;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.DecodeHintType;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.PlanarYUVLuminanceSource;
+import com.google.zxing.Result;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 /**
  * Created by ronitkumar on 11/14/14.
@@ -38,6 +61,7 @@ public class QRScanner extends Activity implements Camera.PreviewCallback{
         super.onResume();
 
         camera=Camera.open();
+        camera.setPreviewCallback(this);
         startPreview();
     }
 
@@ -54,27 +78,36 @@ public class QRScanner extends Activity implements Camera.PreviewCallback{
         super.onPause();
     }
 
-    private Camera.Size getBestPreviewSize(int width, int height,
-                                           Camera.Parameters parameters) {
-        Camera.Size result=null;
+    private Camera.Size getBestPreviewSize(List<Camera.Size> sizes, int w, int h) {
+        final double ASPECT_TOLERANCE = 0.1;
+        double targetRatio=(double)h / w;
 
-        for (Camera.Size size : parameters.getSupportedPreviewSizes()) {
-            if (size.width<=width && size.height<=height) {
-                if (result==null) {
-                    result=size;
-                }
-                else {
-                    int resultArea=result.width*result.height;
-                    int newArea=size.width*size.height;
+        if (sizes == null) return null;
 
-                    if (newArea>resultArea) {
-                        result=size;
-                    }
-                }
+        Camera.Size optimalSize = null;
+        double minDiff = Double.MAX_VALUE;
+
+        int targetHeight = h;
+
+        for (Camera.Size size : sizes) {
+            double ratio = (double) size.width / size.height;
+            if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE) continue;
+            if (Math.abs(size.height - targetHeight) < minDiff) {
+                optimalSize = size;
+                minDiff = Math.abs(size.height - targetHeight);
             }
         }
 
-        return(result);
+        if (optimalSize == null) {
+            minDiff = Double.MAX_VALUE;
+            for (Camera.Size size : sizes) {
+                if (Math.abs(size.height - targetHeight) < minDiff) {
+                    optimalSize = size;
+                    minDiff = Math.abs(size.height - targetHeight);
+                }
+            }
+        }
+        return optimalSize;
     }
 
     private void initPreview(int width, int height) {
@@ -91,12 +124,14 @@ public class QRScanner extends Activity implements Camera.PreviewCallback{
             }
 
             if (!cameraConfigured) {
-                Camera.Parameters parameters=camera.getParameters();
-                Camera.Size size=getBestPreviewSize(width, height,
-                        parameters);
+                Camera.Parameters parameters = camera.getParameters();
+                List<Camera.Size> sizes = camera.getParameters().getSupportedPreviewSizes();
+                Camera.Size size = getBestPreviewSize(sizes, width,
+                        height);
 
                 if (size!=null) {
                     parameters.setPreviewSize(size.width, size.height);
+                    Log.e("Preview Size", "Width: " + size.width + "\nHeight: " + size.height);
                     camera.setParameters(parameters);
                     cameraConfigured=true;
                 }
@@ -123,34 +158,30 @@ public class QRScanner extends Activity implements Camera.PreviewCallback{
                 camera.stopPreview();
             }
 
-            Camera.Parameters parameters = camera.getParameters();
             Display display = ((WindowManager)getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
 
             if(display.getRotation() == Surface.ROTATION_0)
             {
-                parameters.setPreviewSize(height, width);
+                initPreview(height, width);
                 camera.setDisplayOrientation(90);
             }
 
             if(display.getRotation() == Surface.ROTATION_90)
             {
-                parameters.setPreviewSize(width, height);
+                initPreview(width, height);
             }
 
             if(display.getRotation() == Surface.ROTATION_180)
             {
-                parameters.setPreviewSize(height, width);
+                initPreview(height, width);
             }
 
             if(display.getRotation() == Surface.ROTATION_270)
             {
-                parameters.setPreviewSize(width, height);
+                initPreview(width, height);
                 camera.setDisplayOrientation(180);
             }
 
-            camera.setParameters(parameters);
-
-            initPreview(width, height);
             startPreview();
         }
 
@@ -161,6 +192,25 @@ public class QRScanner extends Activity implements Camera.PreviewCallback{
 
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
+        Camera.Size pSize = camera.getParameters().getPreviewSize();
+        Map<DecodeHintType,Object> tmpHintsMap = new EnumMap<DecodeHintType, Object>(DecodeHintType.class);
+        tmpHintsMap.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+        tmpHintsMap.put(DecodeHintType.POSSIBLE_FORMATS, EnumSet.allOf(BarcodeFormat.class));
 
+        try {
+            String result = readQRCode(data, tmpHintsMap, pSize);
+            Log.e("On Preview Frame", "Read Successful! Data: " + result);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+            Log.e("On Preview Frame", "Read Unsuccessful. (stack trace): " + e.toString());
+        }
+    }
+
+    public static String readQRCode(byte[] data, Map hintMap, Camera.Size pSize) throws NotFoundException {
+        BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(
+                new PlanarYUVLuminanceSource(data, pSize.width, pSize.height, 0, 0, pSize.width, pSize.height, false)));
+        Result qrCodeResult = new MultiFormatReader().decode(binaryBitmap,
+                hintMap);
+        return qrCodeResult.getText();
     }
 }
