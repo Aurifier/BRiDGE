@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,25 +16,19 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.caffeinecraft.bridge.dao.ContactsDataSource;
 import com.caffeinecraft.bridge.model.Contact;
 import com.caffeinecraft.bridge.model.ContactMethod;
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
-import java.io.File;
-import java.io.IOException;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 public class ViewContact extends Activity implements View.OnClickListener{
 
@@ -116,6 +111,7 @@ public class ViewContact extends Activity implements View.OnClickListener{
             case R.id.buttonExportQRCode:
                 try {
                     generateQRCode(thiscontact.toString(), qrCode);
+                    Log.d("View Contact", "Contact to String: " + thiscontact.toString() );
                 } catch (WriterException e) {
                     e.printStackTrace();
                 }
@@ -128,11 +124,11 @@ public class ViewContact extends Activity implements View.OnClickListener{
         com.google.zxing.Writer writer = new QRCodeWriter();
         String finaldata = Uri.encode(data, "utf-8");
 
-        BitMatrix bm = writer.encode(finaldata, BarcodeFormat.QR_CODE,150, 150);
-        Bitmap ImageBitmap = Bitmap.createBitmap(150, 150, Bitmap.Config.ARGB_8888);
+        BitMatrix bm = writer.encode(finaldata, BarcodeFormat.QR_CODE,750, 750);
+        Bitmap ImageBitmap = Bitmap.createBitmap(750, 750, Bitmap.Config.ARGB_8888);
 
-        for (int i = 0; i < 150; i++) {//width
-            for (int j = 0; j < 150; j++) {//height
+        for (int i = 0; i < 750; i++) {//width
+            for (int j = 0; j < 750; j++) {//height
                 ImageBitmap.setPixel(i, j, bm.get(i, j) ? Color.BLACK: Color.WHITE);
             }
         }

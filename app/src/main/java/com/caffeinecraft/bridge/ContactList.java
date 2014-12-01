@@ -49,11 +49,29 @@ public class ContactList extends Activity implements View.OnClickListener{
         ListView lv = (ListView) findViewById(R.id.listView);
         allcontacts = foo.getAllContacts();
         List<String> nameList = new ArrayList<String>();
-        for(int i = 0;i<allcontacts.size();i++)
-        {
+        for(int i = 0;i<allcontacts.size();i++) {
             Contact temp = allcontacts.get(i);
-            nameList.add(temp.getFirstName() + " " + temp.getLastName());
-        }
+            if (temp.getFirstName() != null || temp.getLastName() != null) {
+                    if (temp.getFirstName() == null) {
+                        nameList.add(temp.getLastName());
+                        temp.setFirstName("");
+                        allcontacts.remove(i);
+                        allcontacts.add(i, temp);
+                    } else if (temp.getLastName() == null) {
+                        nameList.add(temp.getFirstName());
+                        temp.setLastName("");
+                        allcontacts.remove(i);
+                        allcontacts.add(i, temp);
+                    } else if (temp.getFirstName().equals("")  && temp.getLastName().equals("") ){
+                        foo.deleteContact(temp);
+                    } else {
+                        nameList.add(temp.getFirstName() + " " + temp.getLastName());
+                    }
+                } else {
+                    foo.deleteContact(temp);
+                }
+            }
+
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_1,
@@ -99,9 +117,6 @@ public class ContactList extends Activity implements View.OnClickListener{
                 break;
             case R.id.buttonConversationList:
                 startActivity(new Intent(this, ConversationList.class));
-                break;
-            case R.id.buttonContactList:
-                this.recreate();
                 break;
         }
     }

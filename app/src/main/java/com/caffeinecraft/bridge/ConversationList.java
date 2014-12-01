@@ -18,9 +18,6 @@ import java.util.List;
  * Created by ronitkumar on 11/10/14.
  */
 public class ConversationList extends Activity implements View.OnClickListener {
-    String[] contactName = new String[]{"Contact One", "Contact Two", "Contact Three",
-            "Contact Four", "Contact Five", "Contact Six", "Contact Seven", "Contact Eight",
-            "Contact Nine", "Contact Ten"};
     private ConversationDataSource foo;
     private List<Conversation> conversationList;
 
@@ -41,8 +38,6 @@ public class ConversationList extends Activity implements View.OnClickListener {
         lv.setOnItemClickListener(new ListView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> a, View v, int i, long l) {
                 Intent intent = new Intent(getApplicationContext(), ConversationScreen.class);
-                intent.putExtra("id", String.valueOf(l));
-                intent.putExtra("Contact", contactName[i]);
                 intent.putExtra("contact_id", conversationList.get(i).getContact().getId());
                 startActivity(intent);
             }

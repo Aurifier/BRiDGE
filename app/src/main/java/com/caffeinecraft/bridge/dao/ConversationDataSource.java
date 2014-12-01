@@ -43,6 +43,9 @@ public class ConversationDataSource {
 
     public Conversation getConversation(Contact contact) {
         Conversation conversation = new Conversation();
+        if(contact == null) {
+            return conversation;
+        }
         conversation.setContact(contact);
         addMessages(conversation);
         return conversation;
@@ -83,8 +86,10 @@ public class ConversationDataSource {
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Contact contact = contactsDS.getContact(cursor.getLong(0));
-            Conversation conversation = getConversation(contact);
-            conversations.add(conversation);
+            if(contact != null) {
+                Conversation conversation = getConversation(contact);
+                conversations.add(conversation);
+            }
             cursor.moveToNext();
         }
         cursor.close();
@@ -92,6 +97,9 @@ public class ConversationDataSource {
     }
 
     private void addMessages(Conversation conversation) {
+        if (conversation.getContact() == null) {
+            return;
+        }
         Cursor messageCursor = database.rawQuery(
             "SELECT "
                 + BridgeSQLiteHelper.ConversationTable.COLUMN_RECEIVED + ", "
