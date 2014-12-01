@@ -1,22 +1,44 @@
 package com.caffeinecraft.bridge;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.caffeinecraft.bridge.dao.ContactsDataSource;
 import com.caffeinecraft.bridge.model.Contact;
 import com.caffeinecraft.bridge.model.ContactMethod;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ViewContact extends Activity implements View.OnClickListener{
 
     private Contact thiscontact;
+    ImageView qrCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +58,9 @@ public class ViewContact extends Activity implements View.OnClickListener{
             if(allcontacts.get(i).getId()==contactid)
             {thiscontact = allcontacts.get(i);}
         }
+
+        //Initialize Image View for qr code display
+        qrCode = (ImageView)findViewById(R.id.imageView);
 
         //Set Text View
         TextView txtName=(TextView)findViewById(R.id.textName);
@@ -89,8 +114,61 @@ public class ViewContact extends Activity implements View.OnClickListener{
                 startActivity(intent1);
                 break;
             case R.id.buttonExportQRCode:
-                //startActivity(new Intent(this, ExportQRCode.class));
+                try {
+                    generateQRCode(thiscontact.toString(), qrCode);
+                } catch (WriterException e) {
+                    e.printStackTrace();
+                }
                 break;
         }
     }
+
+
+    private void generateQRCode(String data, ImageView img)throws WriterException {
+        com.google.zxing.Writer writer = new QRCodeWriter();
+        String finaldata = Uri.encode(data, "utf-8");
+
+        BitMatrix bm = writer.encode(finaldata, BarcodeFormat.QR_CODE,150, 150);
+        Bitmap ImageBitmap = Bitmap.createBitmap(150, 150, Bitmap.Config.ARGB_8888);
+
+        for (int i = 0; i < 150; i++) {//width
+            for (int j = 0; j < 150; j++) {//height
+                ImageBitmap.setPixel(i, j, bm.get(i, j) ? Color.BLACK: Color.WHITE);
+            }
+        }
+
+        if (ImageBitmap != null) {
+            img.setImageBitmap(ImageBitmap);
+        }
+
+        loadPhoto(img);
+    }
+
+    private void loadPhoto(ImageView imageView) {
+
+        ImageView tempImageView = imageView;
+
+
+        AlertDialog.Builder imageDialog = new AlertDialog.Builder(this);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        View layout = inflater.inflate(R.layout.custom_fullimage_dialog,
+                (ViewGroup) findViewById(R.id.layout_root));
+        ImageView image = (ImageView) layout.findViewById(R.id.fullimage);
+        image.setImageDrawable(tempImageView.getDrawable());
+        imageDialog.setView(layout);
+        imageDialog.setPositiveButton("OK", new DialogInterface.OnClickListener(){
+
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+
+        });
+
+
+        imageDialog.create();
+        imageDialog.show();
+    }
+
+
 }
