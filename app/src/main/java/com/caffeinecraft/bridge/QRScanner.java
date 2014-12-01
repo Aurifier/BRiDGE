@@ -1,6 +1,7 @@
 package com.caffeinecraft.bridge;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.hardware.Camera;
 import android.os.Bundle;
@@ -71,6 +72,7 @@ public class QRScanner extends Activity implements Camera.PreviewCallback{
             camera.stopPreview();
         }
 
+        camera.setPreviewCallback(null);
         camera.release();
         camera=null;
         inPreview=false;
@@ -200,6 +202,13 @@ public class QRScanner extends Activity implements Camera.PreviewCallback{
         try {
             String result = readQRCode(data, tmpHintsMap, pSize);
             Log.e("On Preview Frame", "Read Successful! Data: " + result);
+            Bundle b = new Bundle();
+            b.putString("result", result);
+            Intent i = getIntent(); //gets the intent that called this intent
+            i.putExtras(b);
+            setResult(Activity.RESULT_OK, i);
+            camera.setPreviewCallback(null);
+            finish();
         } catch (NotFoundException e) {
             e.printStackTrace();
             Log.e("On Preview Frame", "Read Unsuccessful. (stack trace): " + e.toString());

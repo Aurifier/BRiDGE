@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.caffeinecraft.bridge.dao.ContactsDataSource;
 import com.caffeinecraft.bridge.model.Contact;
@@ -24,6 +25,8 @@ public class EditContact extends Activity implements View.OnClickListener{
     TextView editTextFirstName;
     TextView editTextLastName;
     ListView lv;
+
+    public static final int QRSCAN_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,9 +115,20 @@ public class EditContact extends Activity implements View.OnClickListener{
                 this.finish();
                 break;
             case R.id.buttonImportQRCode:
-                startActivity(new Intent(getApplicationContext(), QRScanner.class));
+                startActivityForResult(new Intent(getApplicationContext(), QRScanner.class), QRSCAN_REQUEST_CODE);
                 break;
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            String resultValue = data.getStringExtra("result");
+            Log.d("EditContact", "result from scan: " + resultValue);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }
 
