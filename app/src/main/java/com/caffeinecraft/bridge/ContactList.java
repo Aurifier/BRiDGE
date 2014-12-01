@@ -28,23 +28,6 @@ public class ContactList extends Activity implements View.OnClickListener{
         foo = new ContactsDataSource(this);
         foo.open();
 
-        /*
-        //Create dummy contacts
-        List<Contact> temp2 = foo.getAllContacts();
-        for(int i = 0; i< temp2.size();i++)
-        {
-            foo.deleteContact(temp2.get(i));
-        }
-        for(int i = 0; i< 20; i++)
-        {
-            Contact a = foo.createContact("Player","Number " + i);
-            ContactMethod method = new ContactMethod();
-            method.setType(ContactMethod.Type.SMS);
-            method.setValue("SMS " + i);
-            a.addContactMethod(method);
-            foo.updateContact(a);
-        }*/
-
         //Set up Listview
         ListView lv = (ListView) findViewById(R.id.listView);
         allcontacts = foo.getAllContacts();
