@@ -98,6 +98,7 @@ public class TestActivity extends Activity{
     public boolean onTouchEvent(MotionEvent evt) {
         if (evt.getAction() == MotionEvent.ACTION_DOWN) {
             startActivity(new Intent(this, ContactList.class));
+            finish();
         }
         return false;
     }
